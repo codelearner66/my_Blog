@@ -35,8 +35,5 @@ public class WebUtils
         response.setHeader("content-type",mimeType);
         String fname= URLEncoder.encode(filename,"UTF-8");
         response.setHeader("Content-disposition","attachment; filename="+fname);
-
-//        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-//        response.setCharacterEncoding("utf-8");
     }
 }

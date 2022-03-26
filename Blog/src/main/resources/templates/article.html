@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>学无止境</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link rel="stylesheet" th:href="@{/static/css/normalize.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/static/css/zui.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/static/css/MyStyle/headerNav.css}" type="text/css">
+</head>
+<body>
+<div class="container-fluid">
+    <div th:replace="~{index::header_nav}"></div>
+    <div class="col-md-12" id="mainArticle">
+        <!--        文章模块-->
+        <div class="col-md-8" th:each="article : ${articleDetail}">
+            <div class="col-md-12 article">
+                <header>
+                    <h1 th:text="${article.title}"> 标题</h1>
+                    <h2>
+                        <i class="icon icon-time icon-1x"></i>发表于<span>2022-1-30</span>&nbsp;&nbsp;&nbsp;
+                        <i class="icon icon-eye-open"></i> <small th:text="${article.viewCount}"></small>
+                    </h2>
+                    <div class="label col-md-1">
+                        <a th:href="@{'/articleView/'+${article.categoryId}}" th:text="${article.categoryName}"></a>
+                    </div>
+                </header>
+                <div class="content col-md-12" th:utext="${article.content}"></div>
+
+                <div class="footer">
+                    <div class="donate-word col-md-12">
+                        <i class="icon icon-gift icon-2x "></i>&nbsp;&nbsp; <strong>赞赏</strong>
+                        <div class="col-md-12" id="donateDiv">
+                            <div class="donate-tip col-md-4 card">
+                                <img th:src="@{/static/images/weixinpay.png}"/>
+                                <div class="card-heading"><strong>微信扫一扫，向我赞赏</strong></div>
+                                <div class="card-content text-muted">小手一点，人家会更努力哟(≧∇≦)ﾉ</div>
+                            </div>
+                            <div class="donate-tip col-md-offset-1 col-md-4 card">
+                                <img th:src="@{/static/images/alipay.jpg}"/>
+                                <div class="card-heading"><strong>支付宝扫一扫，向我赞赏</strong></div>
+                                <div class="card-content text-muted">小手一点，人家会更努力哟(≧∇≦)ﾉ</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--        热门推荐-->
+        <div class="col-md-4" th:replace="~{index::rightFiex}"></div>
+    </div>
+</div>
+
+<script th:src="@{/static/js/jquery.js}" type="text/javascript"></script>
+<script th:src="@{/static/js/common.js}" type="text/javascript"></script>
+<script th:src="@{/static/js/zui.js}" type="text/javascript"></script>
+<script th:src="@{/static/js/flexible.js}" type="text/javascript"></script>
+<script>
+    (function(){
+        let supperLink1 = supperLink("/article/hotArticleList","GET");
+        var data=supperLink1.data;
+        for (let i = 0; i < data.length; i++) {
+            console.log(data[i]);
+            var html= "<li class ='hot_item'>"+
+                "<a href='/articleView/" + data[i].id + "'>" + data[i].title +
+                "&nbsp;&nbsp;&nbsp;<small>" +data[i].viewCount+"</small> <i class='icon icon-eye-open'></i></a></li>"
+            $("#hot_list").append(html);
+        }
+    })();
+</script>
+</body>
+</html>

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 
@@ -16,10 +17,12 @@ public class User  {
     private Long id;
 
     //用户名
+    @NotNull
     private String userName;
     //昵称
     private String nickName;
     //密码
+    @NotNull
     private String password;
     //用户类型：0代表普通用户，1代表管理员
     private String type;

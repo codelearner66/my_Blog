@@ -17,7 +17,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("sg_comment")
+@TableName("my_comment")
 public class Comment  {
     @TableId
     private Long id;

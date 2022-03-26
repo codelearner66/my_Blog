@@ -1,16 +1,28 @@
 server:
-  port: 7777
+  port: 8081
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/sg_blog?characterEncoding=utf-8
+    url: jdbc:mysql://localhost:3306/my_blog?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
     username: root
     password: ccx2019
     driver-class-name: com.mysql.cj.jdbc.Driver
+
 #  文件上传设置
   servlet:
     multipart:
       max-file-size: 2MB
       max-request-size: 5MB
+  #指定静态资源路径
+  mvc:
+    static-path-pattern: static/**
+  thymeleaf:
+    cache: false
+#  集成邮件发送
+  mail:
+    host: smtp.qq.com
+    username: chenbyf1314@foxmail.com
+    password: nioowvafbetxbdgh
+    properties.mail.smtp.ssl.enable: true #开启SSL
 #mybatis plus配置
 mybatis-plus:
   configuration:
@@ -27,3 +39,4 @@ oss:
   accessKey: T0LNWjKSGk-Wa4y6BjKevQqWBg15SiTPGpjI7bfn
   secretKey: XBJv65L6q6arOyYOhgJuhCgcD_hp53eJwKudRsF9
   bucket: ccxprojests01
+

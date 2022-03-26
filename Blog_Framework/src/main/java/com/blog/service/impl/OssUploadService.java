@@ -30,7 +30,7 @@ public class OssUploadService implements UploadService {
         //获取原始文件名
         String originalFilename = img.getOriginalFilename();
         //对原始文件名进行判断
-        if(!originalFilename.endsWith(".png")){
+        if(img.isEmpty()||!originalFilename.endsWith(".png")){
             throw new SystemException(AppHttpCodeEnum.FILE_TYPE_ERROR);
         }
 
