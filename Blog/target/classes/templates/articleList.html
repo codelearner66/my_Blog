@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>学无止境</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link rel="stylesheet" th:href="@{/static/css/normalize.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/static/css/zui.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/static/css/MyStyle/headerNav.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/static/lib/uploader/zui.uploader.min.css}">
+</head>
+<body id="body">
+<div class="container-fluid">
+    <div th:replace="~{index::header_nav}"></div>
+    <div class="col-md-12" id="mainArticle">
+        <!--        文章模块-->
+        <div class="col-md-8">
+            <div class="col-md-12 article" th:each="article : ${articleList}">
+                <!--                标题说明导航-->
+                <h2><a th:href="@{'/articleView/?id='+${article.id}}+'&rootId=1&pageNum=1&pageSize=10&commentNum=1&commentSize=10'" th:text="${article.title}"></a></h2>
+                <header>
+                    <!--                 文章详情跳转-->
+                    <div class="label col-md-2">
+                        <i class="icon icon-time icon-1x"></i>发表于
+                        <span th:text="${#dates.format(article.createTime,'yyyy-MM-dd')}">2022-1-30</span>
+                    </div>
+                </header>
+                <!--                缩略图-->
+                <div class="content col-md-12">
+                    <a class="card" th:href="@{'/articleView/?id='+${article.id}}+'&rootId=1&pageNum=1&pageSize=10&commentNum=1&commentSize=10'">
+                        <img alt="" class="thumbnail" src="#">
+                        <div class="card-heading"><strong th:text="${article.categoryName}">梦想的赶路人</strong></div>
+                        <div class="card-content text-muted" th:text="${article.summary}"></div>
+                        <div class="card-actions">
+                            <button class="btn btn-danger" type="button"><i class="icon-heart"></i> 喜欢</button>
+                            <i class="icon icon-eye-open"></i> <small th:text="${article.viewCount}"></small>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <!--            分页模块-->
+            <div  class="col-md-12" >
+                <ul th:id="myPagerExample" class="pager" data-ride="pager" data-page="2" data-rec-total="89"></ul>
+            </div>
+        </div>
+
+        <!--        热门推荐-->
+        <div class="col-md-4" th:replace="~{index::rightFiex}"></div>
+    </div>
+</div>
+
+<script th:src="@{/static/js/jquery.js}" type="text/javascript"></script>
+<script th:src="@{/static/js/common.js}" type="text/javascript"></script>
+<script th:src="@{/static/js/zui.js}" type="text/javascript"></script>
+<script th:src="@{/static/lib/uploader/zui.uploader.min.js}"></script>
+<script th:src="@{/static/js/flexible.js}" type="text/javascript"></script>
+<script>
+    // 或者使用函数来动态返回链接
+    $('#myPagerExample').pager({
+        recTotal: [[${total}]],
+        linkCreator: function(page, pager) {
+            return '/articleList?pageNum='+page+'&pageSize=10&categoryId='+[[${type}]];
+        }
+    });
+    <!--    热门列表-->
+    (function () {
+        let supperLink1 = supperLink("/article/hotArticleList", "GET");
+        var data = supperLink1.data;
+        for (let i = 0; i < data.length; i++) {
+            console.log(data[i]);
+            var html = "<li class ='hot_item'>" +
+                "<a href='/articleView/?id=" + data[i].id + "&pageNum=1&pageSize=10'>" + data[i].title +
+                "&nbsp;&nbsp;&nbsp;<small>" + data[i].viewCount + "</small> <i class='icon icon-eye-open'></i></a></li>"
+            $("#hot_list").append(html);
+        }
+        getViewData();
+    })();
+    $(window).scroll(function () {
+        //  alert("滚动了")
+        $("#rightFiex").attr("class", "fixedClass");
+    })
+
+    function getViewData() {
+        var pageNumber = 1;
+        var pageSize = 10;
+        var type = [[${type}]];
+        let ajaxpost1 = Doajax("/article/articleList", "GET",
+            {
+                "pageNum": pageNumber,
+                "pageSize": pageSize,
+                "categoryId": type
+            });
+        var data = ajaxpost1.data.rows;
+        console.log(data)
+        var i = 0
+        $(".thumbnail").each(function () {
+            var n = $(this);
+            n.attr("src", data[i].thumbnail);
+            i++;
+        })
+    }
+    // 或者在初始化时指定
+    $('[data-toggle="tooltip"]').tooltip({
+        placement: 'right'
+    });
+    //图片上传
+    $('#tableUploader').uploader({
+        url: '/upload',
+        limitFilesCount: 1,
+        lang: 'zh_cn',
+        filters: {
+            mime_types: [{title: '图片', extensions: 'jpg,png'}]
+        },
+        deleteActionOnDone: function (file, doRemoveFile) {
+            doRemoveFile();
+        },
+        onFileUploaded: function (file, responseObject) {
+            //Todo 上传成功后 修改显示的头像 收起上传图标
+            $("#uploadBar").hide();
+            let response = JSON.parse(responseObject.response);
+            console.log(response);
+            $("#avatar").attr("src", response.msg);
+            $("#modMessageBar").attr("class", "col-md-10");
+        }
+    });
+</script>
+</body>
+</html>
