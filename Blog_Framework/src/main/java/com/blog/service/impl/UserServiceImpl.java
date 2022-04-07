@@ -2,7 +2,9 @@ package com.blog.service.impl;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blog.commonResult.ResponseResult;
 import com.blog.enums.AppHttpCodeEnum;
@@ -26,6 +28,7 @@ import java.util.Date;
  */
 @Service("userService")
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
     @Autowired
     PasswordEncoder bCryptPasswordEncoder;
     @Override
@@ -38,9 +41,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         UserInfoVo vo = BeanCopyUtils.copyBean(user,UserInfoVo.class);
         return ResponseResult.okResult(vo);
     }
-
-
-
     @Override
     public ResponseResult register(User user) {
 //ToDO 检验email是否唯一
@@ -72,19 +72,61 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return user;
     }
     @Override
-    public Boolean updateUser(User user) {
+    /**
+     * 更新用户信息
+     * 通过条件判断与之前保存的不同才会进行更新
+     */
+    public ResponseResult updateUser(User user) {
         if (user == null) {
             throw new RuntimeException("用户为空");
         }
-        String encode = bCryptPasswordEncoder.encode(user.getPassword());
-        user.setPassword(encode);
+        User oldUser= SecurityUtils.getLoginUser().getUser();
+        //todo 判断修改过的字段 进行更新
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("id",user.getId()).set("password",user.getPassword());
+        updateWrapper.eq("id",oldUser.getId());
+        updateWrapper.set(!oldUser.getNickName().equals(user.getNickName()),"nick_name",user.getNickName())
+                .set(!oldUser.getEmail().equals(user.getEmail()),"email",user.getEmail())
+                .set(!oldUser.getSex().equals(user.getSex()),"sex",user.getSex());
+        if (!"".equals(user.getPassword())){
+            String encode = bCryptPasswordEncoder.encode(user.getPassword());
+            user.setPassword(encode);
+            updateWrapper.set(!oldUser.getPassword().equals(user.getPassword()),"password",user.getPassword());
+        }
         boolean update = update(null, updateWrapper);
         if (update) {
-            return true;
+            return ResponseResult.okResult();
         }
-        return false;
+        return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR);
     }
+    @Override
+    public ResponseResult updatePassword(User user) {
+        if (user == null) {
+            throw new RuntimeException("用户为空");
+        }
+        UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id",user.getId());
+        if (!"".equals(user.getPassword())){
+            String encode = bCryptPasswordEncoder.encode(user.getPassword());
+            user.setPassword(encode);
+            updateWrapper.set("password",user.getPassword());
+        }
+        boolean update = update(null, updateWrapper);
+        if (update) {
+            return ResponseResult.okResult();
+        }
+        return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR);
+    }
+
+    @Override
+    /**
+     * 更新头像
+     */
+    public Boolean updateUserHeader(User user) {
+        LambdaUpdateWrapper<User> lambdaUpdate= Wrappers.<User> lambdaUpdate()
+                .eq(User::getId,user.getId());
+        return update(user, lambdaUpdate);
+    }
+
+
 }
 

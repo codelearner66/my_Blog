@@ -1,10 +1,12 @@
 package com.blog.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -28,4 +30,7 @@ public class CommentVo {
     private Date createTime;
 
     private String username;
+    //对应子评论
+    @TableField(exist = false)
+    List<CommentVo> childCommentVo;
 }

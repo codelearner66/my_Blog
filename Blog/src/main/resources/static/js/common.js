@@ -60,19 +60,101 @@ function supperLink(url, type) {
     return callback;
 }
 
+function Doajax(url, type, data) {
+    var callback = null;
+    $.ajax({
+        async: false,
+        type: type,
+        url: url,
+        data: data,
+        success: function (t) {
+            callback = t;
+        },
+        error: function (e) {
+            callback = e;
+        }
+    });
+    return callback;
+}
+
 /**
  * 页面跳转
  * @param url 跳转地址
  */
 function pageTurns(url) {
     location.href = url;
+
 }
 
-<!--帐号注销-->
+/**
+ * 修改用户信息
+ */
+$("#modUser").click(function () {
+    $("#userpandle").slideToggle();
+    let supperLink1 = supperLink("/user/userInfo", "GET");
+    var data = supperLink1.data;
+    console.log(data);
+    $("#avatar").attr("src", data.avatar);
+    $("#nickName").val(data.nickName);
+    $("#myemail").val(data.email);
+    if (data.sex === '1') {
+        $("#nan").attr("checked", "checked")
+    } else {
+        $("#nv").attr("checked", "checked")
+    }
+    $("#uploadBar").hide();
+    $("#modMessageBar").attr("class", "col-md-10");
+})
+//点击头像后更新视图
+$("#avatar").click(function () {
+    $("#modMessageBar").attr("class", "col-md-5");
+    $("#uploadBar").show();
+})
+
+/**
+ * 检测两次输入的密码是否一致
+ * @returns {boolean}
+ */
+function checkpassword() {
+    let val = $("#inputPassword1").val();
+    let val1 = $("#inputPassword2").val();
+    if (val !== val1) {
+        new $.zui.Messager('警告信息：前后两次密码不一致', {
+            type: 'danger' // 定义颜色主题
+        }).show();
+        return false;
+    }
+    return true;
+}
+
+//当第二遍密码输入完成时检测是否一致
+$("#inputPassword2").change(
+    function () {
+        checkpassword();
+    })
+//修改信息提交
+$("#modityUser").click(function () {
+    let nick= $("#nickName").val();
+    let em = $("#myemail").val();
+    let sex = $("input[name='radioOptions']:checked").val();;
+    if (checkpassword()) {
+       let pass = $("#inputPassword1").val();
+       let doajax = Doajax("/user/updataUser","post",{
+           nickName:nick,
+           password:pass,
+           email:em,
+           sex: sex
+        });
+       console.log(doajax);
+    }
+})
+/**
+ * <!--帐号注销-->
+ */
 $("#logout").click(function () {
     $.ajax({
         async: false,
-        type: "POST",
+        type: "GET",
         url: "/logout",
         success: function (t) {
             localStorage.removeItem("token");
@@ -96,7 +178,7 @@ $select.mouseenter(function () {
     console.log(data)
     for (let i = 0; i < data.length; i++) {
         var html = "<div class='col-md-12 select-item'> "
-            + "<a href='/articleView/" + data[i].id + "'>" + data[i].name + "</a>"
+            + "<a href='/articleList/?pageNum=1&pageSize=10&categoryId=" + data[i].id + "'>" + data[i].name + "</a>"
             + "</div>";
         $("#h-hid").append(html);
     }
@@ -105,5 +187,5 @@ $select.mouseleave(function () {
     $("#select-up").hide();
     $("#select-down").show();
     $h.slideUp();
-   $h.empty();
+    $h.empty();
 })

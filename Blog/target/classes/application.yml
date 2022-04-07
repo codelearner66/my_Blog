@@ -6,7 +6,6 @@ spring:
     username: root
     password: ccx2019
     driver-class-name: com.mysql.cj.jdbc.Driver
-
 #  文件上传设置
   servlet:
     multipart:

@@ -15,15 +15,11 @@ public class UserInfoVo {
      * 昵称
      */
     private String nickName;
-
     /**
      * 头像
      */
     private String avatar;
-
     private String sex;
-
     private String email;
-
 
 }

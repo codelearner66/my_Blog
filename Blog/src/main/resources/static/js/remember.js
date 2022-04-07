@@ -5,7 +5,6 @@
  */
 (function(){
     let item = localStorage.getItem("token");
-    console.log(item);
     if (item !== undefined&&item!==null) {
         document.cookie = 'token_cookie='+item;
         $.ajax({
@@ -14,8 +13,13 @@
             url: "/login",
             headers: {'token': item},
             success : function(t) {
-                console.log("立即执行-------->"+t);
-                location.href="/";//有用！
+                if(t.code===500){
+                    location.href="/";//有用！
+                }
+               else{
+                    localStorage.removeItem("token");
+                    window.location.reload();
+                }
             }
         });
     }

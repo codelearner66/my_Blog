@@ -35,10 +35,12 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         String token = request.getHeader("token");
         //试图获取cookie弥补一直获取请求头中的token信息
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if ("token_cookie".equals(cookie.getName())) {
-                if((token==null|| "".equals(token))&&cookie.getValue()!=null){
-                    token=cookie.getValue();
+        if (cookies != null && cookies.length > 0) {
+            for (Cookie cookie : cookies) {
+                if ("token_cookie".equals(cookie.getName())) {
+                    if((token==null|| "".equals(token))&&cookie.getValue()!=null){
+                        token=cookie.getValue();
+                    }
                 }
             }
         }

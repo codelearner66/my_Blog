@@ -96,7 +96,7 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         Random random = new Random();
          int newpass= random.nextInt(1000000000);
          user.setPassword(String.valueOf(newpass));
-         userService.updateUser(user);
+         userService.updatePassword(user);
         //将新密码发送到用户email帐号
         SimpleMailMessage message = new SimpleMailMessage();
         message.setSubject("my_Blog 找回密码！！！");

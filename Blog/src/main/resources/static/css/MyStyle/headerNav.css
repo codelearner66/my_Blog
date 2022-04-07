@@ -1,55 +1,86 @@
-
-.container-fluid{
+.container-fluid {
     min-width: 810px;
     padding: 0 0 0 0;
+    position: relative;
 }
-#header{
+
+#header {
     height: 40px;
     background-color: #8ac4ee;
-    position: relative;
     z-index: 1000;
 }
-.logo{
-     margin-left: 2%;
-     line-height: 30rem;
- }
-#logo{
-   height:40px;
+
+.logo {
+    margin-left: 2%;
+    line-height: 30rem;
 }
-.head-nav{
+
+#logo {
+    height: 40px;
+}
+
+.head-nav {
     margin-top: 0.5%;
     font-size: 0.12rem;
 }
-#h-hid{
+
+#h-hid {
     margin-top: 0.52rem;
     background-color: rgba(166, 191, 233, 0.8);
     position: absolute;
 }
-.select-item{
+
+.fixedClass {
+    margin-left: 69%;
+    margin-top: -0.6rem;
+    position: fixed;
+}
+
+.select-item {
     text-align: center;
     line-height: 0.4rem;
-    border-bottom:1px solid white;
+    border-bottom: 1px solid white;
     padding: 0 0 0 0;
     text-decoration: none;
 }
-.director{
+
+.btn11 {
+    background-color: #8ac4ee;
+    border: 0 solid #8ac4ee;
+}
+
+#userpandle {
+    height: auto;
+    position: absolute;
+    margin-left: 25%;
+    margin-top: 0.52rem;
+    border: 1px solid rgba(190, 221, 241, 0.75);
+    border-radius: 0.2rem;
+    background-color: rgba(190, 221, 241, 0.75);
+}
+
+.director {
     margin-bottom: 1rem;
 }
 
-#hot_bar{
-  height: 10rem;
+#hot_bar {
+    height: 15rem;
     background-color: rgba(240, 224, 198, 0.64);
 }
-#hot_list{
+
+#hot_list {
     margin-top: 0.2rem;
 }
-.hot_item{
+
+.hot_item {
     height: 0.7rem;
     line-height: 0.7rem;
 }
-ul{
+
+ul {
     text-align: left;
 }
-li{
+
+li {
     list-style: none;
 }
