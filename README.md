@@ -1,5 +1,9 @@
 # my_Blog
 个人博客基础框架
-后端主要使用到的技术有 spring boot spring security redis  七牛云 jwt等...
+后端主要使用到的技术有 spring boot spring security redis  七牛云 jwt，数据库是mysql8.1版本等...
 目前只完成到了 前台的博客部分 还没有后台实现
 后端接口有两套 分别用于前后端分离和不分离的实现
+Framework是公共部分 包括一些安全配置公共方法类等大部分方法
+admin是后台部分（待完成）
+blog是前台部分是用户看到的部分已完成大部分 页面当然是不够精美和完善
+
