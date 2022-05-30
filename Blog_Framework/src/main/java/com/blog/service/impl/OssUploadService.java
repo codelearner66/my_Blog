@@ -28,6 +28,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -126,7 +128,41 @@ public class OssUploadService implements UploadService {
         return ResponseResult.okResult(200, "/upload/" + SecurityUtils.getUserId()+"/"+fileName+lastName);
     }
 
+    @Override
+    public ResponseResult uploadArticleImg(List<MultipartFile> multipartFile, HttpServletRequest request) {
+        if (multipartFile.isEmpty()) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.FILE_SIZE_ERROR);
+        }
+        List<String> fileList = new ArrayList<>();
+        for (MultipartFile img : multipartFile) {
+            //校验图片信息
+            String originalFilename = img.getOriginalFilename();
+            String lastName;
+            if (!originalFilename.endsWith(".jpg") && !originalFilename.endsWith(".png")) {
+                throw new SystemException(AppHttpCodeEnum.FILE_TYPE_ERROR);
+            }
+            if (img.getSize() > 1024 * 1024 * 5) {
+                throw new SystemException(AppHttpCodeEnum.FILE_SIZE_ERROR);
+            }
+            //获取文件后缀
+            lastName = originalFilename.substring(originalFilename.length() - 4);
+            //保存文件到本地路径
+            String path = "E:\\jee-2020-092\\spring boot\\my_Blog\\Blog\\src\\main\\resources\\static\\upload\\" + SecurityUtils.getUserId() + "\\";
+            File file = new File(path);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            String fileName = SecurityUtils.getUserId() + UUID.randomUUID().toString().replaceAll("-", "");
+            try {
+                fileList.add("/upload/" + SecurityUtils.getUserId()+"/"+fileName+lastName);
+                img.transferTo(new File(path, fileName + lastName));
 
+            } catch (IOException e) {
+                throw new SystemException(AppHttpCodeEnum.FILE_TYPE_ERROR);
+            }
+        }
+        return ResponseResult.okResult(fileList);
+    }
 
 
 }

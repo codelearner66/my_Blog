@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<img src="/wxlogin" id="captcha" style="cursor: pointer;" title="点击刷新"  alt="微信登陆">
+<script type="text/javascript" th:src="@{/static/js/jquery.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/script.js}"></script>
+<script>
+    $("#captcha").click(function(){
+        $("#captcha").attr("src","/wxlogin");
+    })
+</script>
+</body>
+</html>

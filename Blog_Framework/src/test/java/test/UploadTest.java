@@ -1,5 +1,6 @@
 package test;
 
+import com.blog.mapper.UserMapper;
 import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
@@ -9,9 +10,11 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class UploadTest {
-
+    @Autowired
+    UserMapper userMapper;
     @Test
     public void uptest(){
         //构造一个带指定 Region 对象的配置类
@@ -44,4 +47,5 @@ public class UploadTest {
             }
         }
     }
+
 }

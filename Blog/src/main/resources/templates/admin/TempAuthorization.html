@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <title>授权中心 - my_blog中文后台管理系统</title>
+    <link href="favicon.ico" rel="icon" type="image/ico">
+    <link href="/static/admin/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/admin/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="/static/admin/css/style.css" rel="stylesheet">
+    <!--对话框-->
+    <link rel="stylesheet" href="/static/admin/js/jconfirm/jquery-confirm.min.css">
+    <script src="/static/js/vue.js"></script>
+</head>
+<body data-logobg="color_8" data-sidebarbg="color_8">
+<div class="layout-web" id="app">
+    <div class="layout-container">
+        <div th:replace="admin/index::AsideNav"></div>
+        <div th:replace="admin/index::HeaderNav"></div>
+        <!--页面主要内容-->
+        <main class="layout-content">
+            <!--     角色模态框-->
+            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="gridSystemModal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="gridSystemModalLabel">角色</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>角色名</th>
+                                        <th>角色权限字符串</th>
+                                        <th>角色状态</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="htmlInsert"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--     权限模态框-->
+            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="MenuModal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="MenuModalLabel">权限</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>权限名</th>
+                                        <th>路由地址</th>
+                                        <th>权限状态</th>
+                                        <th>权限标识</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="MenuModalInsert"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--    用户选择表-->
+            <div class="col-md-offset-11 col-md-1">
+                <button class="btn  btn-success btn-sm" id="subUser" style="margin-top: 5px">提交</button>
+            </div>
+            <div class="col-md-5">
+                <div id="userList">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th>
+                                <input id="check1" type="checkbox">
+                            </th>
+                            <th>用户名</th>
+                            <th>昵称</th>
+                            <th>账号状态</th>
+                            <th>账号类型</th>
+                            <th>角色</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tableList">
+                        <tr th:each="admin: ${adminList.list}">
+
+                            <td>
+                                <input th:value="${admin.id}" type="checkbox">
+                            </td>
+                            <td th:text="${admin.userName}"></td>
+                            <td th:text="${admin.nickName}"></td>
+                            <td th:text="${admin.status} eq  '0' ?  '正常': '停用'"></td>
+                            <td th:text="${admin.type} eq  '0' ?  '普通用户': '管理员'"></td>
+                            <td>
+                                <button class="btn btn-primary btn-sm" data-target="#gridSystemModal"
+                                        data-toggle="modal"
+                                        th:onclick="'ShowRole('+${admin.id}+')'" type="button">
+                                    查看角色
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="card-body">
+                        <nav>
+                            <ul class="pagination no-border" style="margin: 0 25%">
+                                <li th:class="${adminList.pre}==true? '' : 'disabled'">
+                                    <a href="#!"  th:onclick="'Adminpageturns('+${adminList.pre}+','+${adminList.current-1}+')'">
+                                        <span><i class="mdi mdi-chevron-left"></i></span>
+                                    </a>
+                                </li>
+                                <li th:class="${adminList.current}==${index.index+1} ? 'active' : '' "
+                                    th:each="it,index:${adminList.total}">
+                                    <a href="#!"  th:onclick="'Adminpageturns(true,'+${index.index+1}+')'"
+                                       th:text="${index.index+1}"></a>
+                                </li>
+                                <li th:class="${adminList.next}==true? '' : 'disabled'">
+                                    <a href="#!"  th:onclick="'Adminpageturns('+${adminList.next}+','+${adminList.current+1}+')'">
+                                        <span><i class="mdi mdi-chevron-right"></i></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <!--  角色选择框-->
+            <div class="col-md-7">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>
+                                <input id="check2" type="checkbox">
+                            </th>
+                            <th>角色名</th>
+                            <th>角色权限字符串</th>
+                            <th>角色状态</th>
+                            <th>拥有权限</th>
+                        </tr>
+                        </thead>
+                        <tbody id="roleList">
+                        <tr th:each="role,item: ${roleList.list}">
+                            <th>
+                                <input th:value="${role.id}" type="checkbox">
+                            </th>
+                            <td th:text="${role.name}"></td>
+                            <td th:text="${role.roleKey}"></td>
+                            <td th:text="${role.status}  eq  '0' ?  '正常': '停用'"></td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-sm"
+                                        th:onclick="'ShowMenu('+${role.id}+')'"
+                                        data-toggle="modal" data-target="#MenuModal">
+                                    查看权限
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                <div class="card-body">
+                    <nav>
+                        <ul class="pagination no-border" style="margin: 0 25%">
+                            <li th:class="${roleList.pre}==true? '' : 'disabled'">
+                                <a href="#!"  th:onclick="'Rolepageturns('+${roleList.pre}+','+${roleList.current-1}+')'">
+                                    <span><i class="mdi mdi-chevron-left"></i></span>
+                                </a>
+                            </li>
+                            <li th:class="${roleList.current}==${index.index+1} ? 'active' : '' "
+                                th:each="it,index:${roleList.total}">
+                                <a href="#!"  th:onclick="'Rolepageturns(true,'+${index.index+1}+')'"
+                                   th:text="${index.index+1}"></a>
+                            </li>
+                            <li th:class="${roleList.next}==true? '' : 'disabled'">
+                                <a href="#!"  th:onclick="'Rolepageturns('+${roleList.next}+','+${roleList.current+1}+')'">
+                                    <span><i class="mdi mdi-chevron-right"></i></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                   <!--todo 解决分页问题-->
+            </div>
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+
+<script src="/static/admin/js/jquery.min.js" type="text/javascript"></script>
+<script src="/static/admin/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/static/admin/js/perfect-scrollbar.min.js" type="text/javascript"></script>
+<script src="/static/admin/js/main.js" type="text/javascript"></script>
+<!--对话框-->
+<script src="/static/admin/js/jconfirm/jquery-confirm.min.js"></script>
+<script src="/static/admin/js/common.js"></script>
+<script>
+    //记录当前页面分别是第几页
+    var userPage=[[${adminList.current}]];
+    var rolePage=[[${roleList.current}]];
+      <!--选中的用户id-->
+    var checkedId = new Set();
+    var $tableList = $("#tableList :checkbox");
+    var $check1 = $("#check1");
+    var chknum = $tableList.size();//选项总个数
+    var chk = 0;//选中个数
+    //全选或全不选
+    $check1.change(function () {
+        if (this.checked) {
+            $tableList.each(function () {
+                $(this).prop("checked", true);
+            });
+        } else {
+            $tableList.each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+    //设置子复选框点击事件
+    $tableList.each(function () {
+        $(this).click(function () {
+            allchk();
+        })
+    });
+    function allchk() {
+        $tableList.each(function () {
+            if ($(this).prop('checked')) {
+                checkedId.add($(this).val());
+                chk++;
+            } else {
+                if (checkedId.has($(this).val())) {
+                    checkedId.delete($(this).val());
+                }
+            }
+        });
+        if (chknum === chk) {//全选
+            $check1.prop("checked", true);
+        } else {//不全选
+            $check1.prop("checked", false);
+            chk = 0;
+        }
+    }
+    <!--  选中的Roleid-->
+    var Roleid = new Set();
+    var $roleList = $("#roleList :checkbox");
+    var $check2 = $("#check2");
+    var rolechecknum = $roleList.size();//选项总个数
+    var rolechk = 0;//选中个数
+    $check2.change(function(){
+        if (this.checked) {
+            $roleList.each(function () {
+                $(this).prop("checked", true);
+            });
+        } else {
+            $roleList.each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+    $roleList.each(function () {
+        $(this).click(function () {
+            roleallchk();
+        })
+    });
+    function roleallchk(){
+        $roleList.each(function () {
+            if ($(this).prop('checked')){
+                Roleid.add($(this).val());
+                rolechk++;
+            }else{
+                if(Roleid.has($(this).val())){
+                    Roleid.delete($(this).val());
+                }
+            }
+        });
+        if (rolechecknum===rolechk){
+            $check2.prop("checked", true);
+        }
+        else{
+            $check2.prop("checked", false);
+            rolechk = 0;
+        }
+    }
+    //角色模态框
+    let $htmlInsert = $("#htmlInsert");
+    var temp=["正常","停用"];
+    function ShowRole(id){
+        $htmlInsert.empty();
+        let doajax = Doajax("/admin/management/getAdminRoles","GET",{id:id});
+        let data = doajax.data;
+        for (var i=0;i<data.length;i++){
+            let t=i+1;
+            let html="<tr ><th scope='row'>"+t+"</th><td>"+data[i].name+"</td><td>"+data[i].roleKey+"</td><td>"+temp[data[i].status]+"</td></tr>";
+            $htmlInsert.append(html);
+        }
+    }
+    //权限模态框
+    let $menuModal = $("#MenuModalInsert");
+    function ShowMenu(id){
+        $menuModal.empty();
+        let doajax = Doajax("/admin/getRoleMenus","GET",{id:id});
+        let data = doajax.data;
+        for (var i=0;i<data.length;i++){
+            let t=i+1;
+            let html="<tr ><th scope='row'>"+t+"</th><td>"+data[i].menuName+"</td><td>"+data[i].path+"</td><td>"+temp[data[i].status]+"</td><td>"+data[i].perms+"</td></tr>";
+            $menuModal.append(html);
+        }
+    }
+
+    function Rolepageturns(isOk,num){
+        let url ="/admin/TempAuthorizationPageturn?page="+num+'&mpage='+userPage+'&size=10';
+        if(isOk){
+            if(checkedId.size!==0||Roleid.size!==0){
+                $.confirm({
+                    title: '重要提示',
+                    content: '检测到有已选定的内容未提交，是否继续执行操作？',
+                    type: 'red',
+                    typeAnimated: true,
+                    buttons: {
+                        tryAgain: {
+                            text: '确定',
+                            btnClass: 'btn-red',
+                            action: function(){
+                                location.href = url;
+                            }
+                        },
+                        close: {
+                            text: '关闭'
+                        }
+                    }
+                });
+            }
+            else{
+                location.href = url;
+            }
+        }
+    }
+    function Adminpageturns(isOk,num){
+        let url ="/admin/TempAuthorizationPageturn?page="+rolePage+'&mpage='+num+'&size=10';
+        if(isOk){
+            if(checkedId.size!==0||Roleid.size!==0){
+                $.confirm({
+                    title: '重要提示',
+                    content: '检测到有已选定的内容未提交，是否继续执行操作？',
+                    type: 'red',
+                    typeAnimated: true,
+                    buttons: {
+                        tryAgain: {
+                            text: '确定',
+                            btnClass: 'btn-red',
+                            action: function(){
+                                location.href = url;
+                            }
+                        },
+                        close: {
+                            text: '关闭'
+                        }
+                    }
+                });
+            }
+            else{
+                location.href = url;
+            }
+        }
+    }
+    $("#subUser").click(function(){
+
+        //todo 数据检验
+        console.log(Array.from(checkedId))
+        Doajax("/admin/userAddRole","Post",{
+            userIds: Array.from(checkedId),
+            roleId: Array.from(Roleid)
+        })
+    })
+</script>
+</body>
+</html>

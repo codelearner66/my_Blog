@@ -2,6 +2,7 @@ package com.blog.service.impl;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.blog.mapper.SysMenuMapper;
 import com.blog.mapper.UserMapper;
 import com.blog.pojo.LoginUser;
 import com.blog.pojo.User;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -18,6 +20,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    SysMenuMapper menuMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -30,7 +34,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new RuntimeException("用户不存在");
         }
         //返回用户信息
-        // TODO 查询权限信息封装
-        return new LoginUser(user);
+        //查询权限信息封装
+        List<String> userAuthorityList = menuMapper.getUserAuthorityList(user.getId());
+        return new LoginUser(user,userAuthorityList);
     }
+
+
 }

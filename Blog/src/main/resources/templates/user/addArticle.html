@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>下笔如有神</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link rel="stylesheet" th:href="@{/static/css/normalize.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/static/css/zui.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/static/css/MyStyle/headerNav.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/static/lib/uploader/zui.uploader.min.css}" type="text/css">
+    <script th:src="@{/static/js/wangEditor.min.js}" type="text/javascript"></script>
+</head>
+<body id="body">
+<div class="container-fluid">
+    <div th:replace="~{user/index::header_nav}"></div>
+    <div class="col-md-12">
+        <!--   搜索框-->
+        <div class="col-md-offset-2 col-md-5">
+            <div class="input-group col-md-offset-1 col-md-10">
+                <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example"
+                     id="searchbox">
+                    <input class="form-control search-input" id="inputSearch" placeholder="搜索" type="search">
+                    <label class="input-control-icon-left search-icon" for="inputSearch"><i
+                            class="icon icon-search"></i></label>
+                </div>
+                <span class="input-group-btn">
+                <button class="btn btn-primary" id="searchBtn" type="button">搜索</button>
+             </span>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <button class="btn btn-success" onclick="addNewArticle()" type="button">
+                <i class="icon icon-plus"></i>添加新文章
+            </button>
+        </div>
+
+    </div>
+    <div class="col-md-9" id="editorPandl" style="display: none">
+        <!--   关闭按钮-->
+        <div class="col-md-1" style="width: 0.2rem; height: 0.2rem;float: right; margin-top: 0.1rem">
+            <a onclick=" $('#editorPandl').slideToggle()"><i class="icon icon-times"></i></a>
+        </div>
+        <!--    本章编辑模块-->
+        <div class="col-md-12" style="margin: 0.4rem auto">
+            <!--  文章上传表单   -->
+            <div class="col-md-10 col-md-offset-1">
+                <div class="input-control ">
+                    <input class="form-control" id="articleTitle" placeholder="文章标题:" type="text">
+                    <br>
+                    <input class="form-control" id="articleSummary" placeholder="文章摘要:" type="text">
+                    <br>
+                    <select class="form-control" id="articleCategory_id">
+                        <option value="0">文章分类:</option>
+                    </select>
+
+                    <input class="form-control" id="articleThumbnail" type="hidden">
+                    <input class="form-control" id="articleId" type="hidden" value="-1">
+                </div>
+                <!--  文章缩略图上传-->
+                <div class="uploader" id="uploaderExample">
+                    <div class="file-list" data-drag-placeholder="请拖拽文章缩略图到此处"></div>
+                    <button class="btn btn-primary uploader-btn-browse" type="button">
+                        <i class="icon icon-cloud-upload"></i> 选择文件
+                    </button>
+                </div>
+            </div>
+            <!--     编辑区-->
+            <div class="col-md-10 col-md-offset-1" id="editor"></div>
+            <div class="col-md-offset-4 col-md-4">
+                <button class="btn btn-primary" id="save" type="button">保存草稿</button>
+                <button class="btn btn-info" id="submitCheck" type="button">提交审核</button>
+                <button class="btn btn-danger " id="clear" type="button">删除</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-12">
+        <!--    本用户文章列表 -->
+        <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-12 article" th:each="article : ${articleList}">
+                <!--                标题说明导航-->
+                <h2>
+                    <a th:href="@{'/user/articleView/?id='+${article.id}}+'&rootId=1&pageNum=1&pageSize=10&commentNum=1&commentSize=10'"
+                       th:text="${article.title}"></a></h2>
+                <header class="col-md-12">
+                    <!--                 文章详情跳转-->
+                    <div class="label col-md-5">
+                        <i class="icon icon-time icon-1x"></i>发表于
+                        <span th:text="${#dates.format(article.createTime,'yyyy-MM-dd')}">2022-1-30</span>
+                    </div>
+                    <div class="pull-right" th:switch="${article.status}">
+                        <span class="label label-success" th:case="'0'">正常发表</span>
+                        <span class="label label-warning" th:case="'1'">草稿</span>
+                        <span class="label label-info" th:case="'2'">审核中</span>
+                        <span class="label label-danger" th:case="'3'">被驳回</span>
+                    </div>
+                </header>
+                <!--                缩略图-->
+                <div class="content col-md-12">
+                    <div class="card"
+                         th:href="@{'/user/articleView/?id='+${article.id}}+'&rootId=1&pageNum=1&pageSize=10&commentNum=1&commentSize=10'">
+                        <img alt="" class="thumbnail" th:src="@{${article.thumbnail}}">
+                        <div class="card-heading"><strong th:text="${article.categoryName}">梦想的赶路人</strong></div>
+                        <div class="card-content text-muted" th:text="${article.summary}"></div>
+                        <div class="card-actions">
+                            <button class="btn btn-danger" th:onclick="'modity('+${article.id}+')'" type="button"><i
+                                    class="icon-wrench"></i> 修改
+                            </button>
+                            <i class="icon icon-eye-open"></i> <small th:text="${article.viewCount}"></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--            分页模块-->
+            <div class="col-md-12">
+                <ul class="pager" data-page="2" data-rec-total="89" data-ride="pager" th:id="myPagerExample"></ul>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<script th:src="@{/static/js/jquery.js}" type="text/javascript"></script>
+<script th:src="@{/static/js/common.js}" type="text/javascript"></script>
+<script th:src="@{/static/js/zui.js}" type="text/javascript"></script>
+<script th:src="@{/static/lib/uploader/zui.uploader.min.js}"></script>
+<script th:src="@{/static/js/flexible.js}" type="text/javascript"></script>
+<script>
+    //wangeditor编辑器
+    const E = window.wangEditor
+    const editor = new E('#editor')
+    editor.config.placeholder = '欢迎使用My_Blog，下笔如有神哦！！'
+    editor.config.zIndex = 500
+    editor.config.height = 800
+    //保持复制过来的格式
+    editor.config.pasteFilterStyle = false
+    //忽略复制过来的内容的图片
+    editor.config.pasteIgnoreImg = true
+
+    // 配置 server 接口地址
+    editor.config.uploadImgServer = '/uploadArticle'
+    //上传文件类型
+    editor.config.uploadImgAccept = ['jpg', 'png']
+
+    editor.config.uploadFileName = 'articleImg'
+    // 配置菜单栏，设置不需要的菜单
+    editor.config.excludeMenus = [
+        'video'
+    ]
+
+    editor.create()
+    //图片上传回调
+    editor.config.uploadImgHooks = {
+        // 图片上传并返回了结果，图片插入已成功
+        success: function (xhr) {
+            console.log('success', xhr)
+        },
+        // 图片上传并返回了结果，但图片插入时出错了
+        fail: function (xhr, editor, resData) {
+            console.log('fail', resData)
+        },
+        // 上传图片出错，一般为 http 请求的错误
+        error: function (xhr, editor, resData) {
+            console.log('error', xhr, resData)
+        },
+        // 上传图片超时
+        timeout: function (xhr) {
+            console.log('timeout')
+        },
+        // 图片上传并返回了结果，想要自己把图片插入到编辑器中
+        // 例如服务器端返回的不是 { errno: 0, data: [...] } 这种格式，可使用 customInsert
+        customInsert: function (insertImgFn, result) {
+            // result 即服务端返回的接口
+            console.log('customInsert', result)
+            // insertImgFn 可把图片插入到编辑器，传入图片 src ，执行函数即可
+            insertImgFn(result.data[0])
+        }
+    }
+
+    //文章保存清除按钮
+    $("#save").click(function () {
+        let html = editor.txt.html();
+        uploadeArticle(html,'1');
+        transform()
+
+    })
+    $("#clear").click(function () {
+        editor.txt.clear();
+        transform()
+    })
+    $("#submitCheck").click(function(){
+        let html = editor.txt.html();
+        //提交审核
+        uploadeArticle(html,'2');
+        transform()
+    })
+    //    修改文章
+    function modity(id) {
+        let doajax = Doajax(
+            "/article/" + id,
+            "get", {});
+        let data = doajax.data;
+        $("#articleTitle").val(data.title);
+        $("#articleSummary").val(data.summary);
+        $("#articleThumbnail").val(data.thumbnail);
+        $("#articleCategory_id").val(data.categoryId);
+        $("#articleId").val(id);
+        editor.txt.html(data.content)
+        transform();
+    }
+
+    //添加新文章面板按钮事件
+    function addNewArticle() {
+        $("#articleTitle").val("");
+        $("#articleSummary").val("");
+        $("#articleThumbnail").val("");
+        $("#articleCategory_id").val(0);
+        $("#articleId").val(-1);
+        editor.txt.clear();
+        transform();
+    }
+
+    //搜索框
+    $("#searchBtn").click(function () {
+        let val = $("#inputSearch").val();
+        let url = "/user/totoAddArticleDim?str=" + val
+        pageTurns(url);
+    })
+
+    // 或者在初始化时指定
+    $('[data-toggle="tooltip"]').tooltip({
+        placement: 'right'
+    });
+
+    //头像上传
+    $('#tableUploader').uploader({
+        url: '/upload',
+        limitFilesCount: 1,
+        lang: 'zh_cn',
+        filters: {
+            mime_types: [{title: '图片', extensions: 'jpg,png'}]
+        },
+        deleteActionOnDone: function (file, doRemoveFile) {
+            doRemoveFile();
+        },
+        onFileUploaded: function (file, responseObject) {
+            //Todo 上传成功后 修改显示的头像 收起上传图标
+            $("#uploadBar").hide();
+            let response = JSON.parse(responseObject.response);
+            console.log(response);
+            $("#avatar").attr("src", response.msg);
+            $("#modMessageBar").attr("class", "col-md-10");
+        }
+    });
+    //文章缩略图上传
+    $('#uploaderExample').uploader({
+        autoUpload: true,            // 当选择文件后立即自动进行上传操作
+        file_data_name: "articleImg",
+        resize: {
+            height: 400,
+            crop: true,
+            quuality: 90,
+            preserve_headers: false
+        },
+        multi_selection: false,
+        url: '/uploadArticle',  // 文件上传提交地址
+        //删除上传文件
+        deleteActionOnDone: function (file, doRemoveFile) {
+            //调用此方法
+            //todo 点击 图标时删除文件
+            doRemoveFile();
+        },
+        onFileUploaded: function (file, responseObject) {
+            let response = JSON.parse(responseObject.response);
+            if (response.code === 200) {
+                new $.zui.Messager('提示消息：上传成功！', {
+                    type: 'success' // 定义颜色主题
+                }).show();
+            } else {
+                new $.zui.Messager('提示消息：上传出错！！', {
+                    type: 'danger' // 定义颜色主题
+                }).show();
+            }
+            $("#articleThumbnail").val(response.data[0])
+        }
+    });
+
+    //上传文章
+    function uploadeArticle(html,status) {
+        let title = $("#articleTitle").val();
+        let summary = $("#articleSummary").val();
+        let category_id = $("#articleCategory_id").val();
+        let doajax = Doajax("/article/addArticle", "post", {
+            id: $("#articleId").val(),
+            title: title,
+            content: html,
+            stat: status,
+            summary: summary,
+            categoryId: category_id,
+            thumbnail: $("#articleThumbnail").val()
+        });
+        if (doajax.code === 200) {
+            new $.zui.Messager("修改保存成功！", {
+                type: 'success' // 定义颜色主题
+            }).show();
+        } else {
+            new $.zui.Messager("未知错误！！", {
+                type: 'danger' // 定义颜色主题
+            }).show();
+        }
+        console.log(doajax);
+    }
+
+    //文章编辑面板
+    function transform() {
+        $('#editorPandl').slideToggle()
+    }
+
+    //设置文章分类选择下拉框
+    $(document).ready(function () {
+        let categoryList = getCategoryList();
+        console.log(categoryList);
+        var s = $("#articleCategory_id");
+        for (var i = 0; i < categoryList.length; i++) {
+            var html = " <option value=" + categoryList[i].id + ">" + categoryList[i].name + "</option>";
+            s.append(html);
+        }
+    })
+</script>
+</body>
+</html>

@@ -22,6 +22,8 @@ public class ArticleListVo {
     private String categoryName;
     //缩略图
     private String thumbnail;
+    //状态（0已发布，1草稿）
+    private String status;
     //访问量
     private Long viewCount;
 

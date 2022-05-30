@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <title>角色/权限 - bootstrap中文后台管理系统模板</title>
+    <link href="favicon.ico" rel="icon" type="image/ico">
+    <link href="/static/admin/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/admin/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="/static/admin/css/style.css" rel="stylesheet">
+</head>
+<body data-logobg="color_8" data-sidebarbg="color_8">
+<div class="layout-web">
+    <div class="layout-container">
+        <div th:replace="admin/index::AsideNav"></div>
+        <div th:replace="admin/index::HeaderNav"></div>
+        <!--页面主要内容-->
+        <main class="layout-content">
+
+            <div class="container-fluid">
+                <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="gridSystemModal">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="gridSystemModalLabel">权限</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>权限名</th>
+                                            <th>路由地址</th>
+                                            <th>权限状态</th>
+                                            <th>权限标识</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="htmlInsert"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header"><h4>权限 / 角色</h4></div>
+                            <div class="card-body">
+                                <ul class="nav nav-tabs nav-justified">
+                                    <li th:class="${RorM}=='1'? 'active':'nav-item'">
+                                        <a data-toggle="tab" href="#home-basic">角色列表</a>
+                                    </li>
+                                    <li th:class="${RorM}=='2'? 'active':'nav-item'">
+                                        <a data-toggle="tab" href="#profile-basic">权限列表</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a data-toggle="tab" href="#modPane" >新建角色</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a data-toggle="tab" href="#profile-menu">新建权限</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div id="home-basic" th:class="${RorM}=='1'? 'tab-pane fade active in':'tab-pane fade'">
+                                        <table class="table table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>角色名</th>
+                                                <th>角色权限字符串</th>
+                                                <th>角色状态</th>
+                                                <th>拥有权限</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="role,item: ${roleList.list}">
+                                                <th scope="row" th:text="${item.index+1}">1</th>
+                                                <td th:text="${role.name}"></td>
+                                                <td th:text="${role.roleKey}"></td>
+                                                <td th:text="${role.status}  eq  '0' ?  '正常': '停用'"></td>
+                                                <td>
+                                                    <button type="button" class="btn btn-primary btn-sm"
+                                                            th:onclick="'ShowMenu('+${role.id}+')'"
+                                                            data-toggle="modal" data-target="#gridSystemModal">
+                                                        查看角色
+                                                    </button>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group">
+                                                        <button class="btn">操作</button> <button data-toggle="dropdown" class="btn dropdown-toggle"><span class="caret"></span></button>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <a class="btn-sm " th:onclick="'stopRole('+${role.id}+')'"
+                                                                      style="color: lightcoral"  type="button">停用角色
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a data-toggle="tab" th:onclick="'isFillingRole('+'false'+','+${role.id}+')'" style="color: #f4d643" href="#modPane">新建角色</a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="btn-sm" th:onclick="'renewRole('+${role.id}+')'"
+                                                                     style="color: #0FB25F"   type="button">恢复角色
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a data-toggle="tab" th:onclick="'isFillingRole('+'true'+','+${role.id}+')'" style="color: #f0a126" href="##modPane">修改角色</a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="btn-sm " th:onclick="'deleteRole('+${role.id}+')'"
+                                                                   style="color: #f05b5b" type="button">删除角色</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <nav>
+                                            <ul class="pagination no-border" style="margin: 0 25%">
+                                                <li th:class="${roleList.pre}==true? '' : 'disabled'">
+                                                    <a th:href="${roleList.pre}==true? @{'/admin/role_menu?page='+${roleList.current-1}+'&mpage=1&size=10&RorM=1'}:'#!'">
+                                                        <span><i class="mdi mdi-chevron-left"></i></span>
+                                                    </a>
+                                                </li>
+                                                <li th:class="${roleList.current}==${index.index+1} ? 'active' : '' "
+                                                    th:each="it,index:${roleList.total}">
+                                                    <a th:href="@{'/admin/role_menu?page='+${index.index+1}+'&mpage=1&size=10&RorM=1'}"
+                                                       th:text="${index.index+1}"></a>
+                                                </li>
+                                                <li th:class="${roleList.next}==true? '' : 'disabled'">
+                                                    <a th:href="${roleList.next}==true? @{'/admin/role_menu?page='+${roleList.current+1}+'&mpage=1&size=10&RorM=1'}:'#!'">
+                                                        <span><i class="mdi mdi-chevron-right"></i></span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+
+                                    <div id="profile-basic"
+                                         th:class="${RorM}=='2'? 'tab-pane fade active in':'tab-pane fade'">
+                                        <table class="table table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>菜单名</th>
+                                                <th>路由地址</th>
+                                                <th>菜单状态visible</th>
+                                                <th>菜单状态status</th>
+                                                <th>权限标识</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="menu,item: ${menuList.list}">
+                                                <th scope="row" th:text="${item.index+1}">1</th>
+                                                <td th:text="${menu.menuName}"></td>
+                                                <td th:text="${menu.path}"></td>
+                                                <td th:text="${menu.visible} eq  '0' ? '显示': '隐藏'"></td>
+                                                <td th:text="${menu.status}  eq  '0' ?  '正常': '停用'"></td>
+                                                <td th:text="${menu.perms}"></td>
+                                                <td>
+                                                                <div class="btn-group">
+                                                                    <button class="btn">操作</button> <button data-toggle="dropdown" class="btn dropdown-toggle"><span class="caret"></span></button>
+                                                                    <ul class="dropdown-menu">
+                                                                        <li>
+                                                                            <a class="btn-sm " th:onclick="'stopMenu('+${menu.id}+')'"
+                                                                               style="color: lightcoral"  type="button">停用权限
+                                                                            </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a class="btn-sm" th:onclick="'renewMenu('+${menu.id}+')'"
+                                                                               style="color: #0FB25F"   type="button">恢复权限
+                                                                            </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a data-toggle="tab" th:onclick="'isFilling('+'false'+','+${menu.id}+')'" style="color: greenyellow" href="#profile-menu">新建权限</a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a data-toggle="tab" th:onclick="'isFilling('+'true'+','+${menu.id}+')'" style="color: #f0a126" href="#profile-menu">修改权限</a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a class="btn-sm " th:onclick="'deleteMenu('+${menu.id}+')'"
+                                                                               style="color: #f05b5b" type="button">删除权限</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <nav>
+                                            <ul class="pagination no-border" style="margin: 0 25%">
+                                                <li th:class="${menuList.pre}==true? '' : 'disabled'">
+                                                    <a th:href="${menuList.pre}==true? @{'/admin/role_menu?page=1&mpage='+${menuList.current-1}+'&size=10&RorM=2'}:'#!'">
+                                                        <span><i class="mdi mdi-chevron-left"></i></span>
+                                                    </a>
+                                                </li>
+                                                <li th:class="${menuList.current}==${index.index+1} ?'active':''"
+                                                    th:each="it,index:${menuList.total}">
+                                                    <a th:href="@{'/admin/role_menu?page=1&mpage='+${index.index+1}+'&size=10&RorM=2'}"
+                                                       th:text="${index.index+1}"></a>
+                                                </li>
+                                                <li th:class="${menuList.next}==true? '' : 'disabled'">
+                                                    <a th:href="${menuList.next}==true? @{'/admin/role_menu?page=1&mpage='+${menuList.current+1}+'&size=10&RorM=2'}:'#!'">
+                                                        <span><i class="mdi mdi-chevron-right"></i></span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    <!-- 新建角色表单-->
+                                    <div class="tab-pane fade" id="modPane">
+                                        <div class="container-fluid">
+                                            <form class="form-horizontal col-md-12">
+                                                <input type="hidden" id="roleId" value="">
+                                                <div class="form-group">
+                                                    <label class="col-xs-12" for="roleName">角色名称</label>
+                                                    <div class="col-xs-12">
+                                                        <input class="form-control" id="roleName" name="name"
+                                                               placeholder="角色名称.." required type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-xs-12" for="roleKey">角色权限字符串</label>
+                                                    <div class="col-xs-12">
+                                                        <input class="form-control" id="roleKey" name="roleKey"
+                                                               placeholder="角色权限字符串.." required type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-xs-12" for="roleStatus">角色状态</label>
+                                                    <div class="col-xs-12">
+                                                        <select class="form-control" id="roleStatus" name="roleStatus"
+                                                                size="1">
+                                                            <option value="0">正常</option>
+                                                            <option value="1">停用</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-xs-12" for="roleRemark">角色描述</label>
+                                                    <div class="col-xs-12">
+                                                        <textarea class="form-control" id="roleRemark" name="roleRemark"
+                                                                  placeholder="内容.." rows="6"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-2">
+                                                        <button class="btn-sm btn-primary" id="submintBtn"
+                                                                type="button">提交
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <button class="btn-sm btn-warning" type="reset">清空</button>
+                                                    </div>
+                                                    <div class="col-xs-6">
+                                                        <button class="btn-sm btn-purple">
+                                                            <a data-toggle="tab" href="#home-basic"
+                                                               style="color: white">返回角色列表</a>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <!-- 新建权限   -->
+                                    <div class="tab-pane fade" id="profile-menu">
+                                        <div class="container-fluid">
+                                            <form class="form-horizontal col-md-12">
+                                                <input type="hidden" id="menuId" value="">
+                                                <div class="form-group">
+                                                    <label class="col-xs-12" for="menuName">权限名称</label>
+                                                    <div class="col-xs-12">
+                                                        <input class="form-control" id="menuName" name="name"
+                                                               placeholder="权限名称.." required type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-xs-12" for="path">路由地址</label>
+                                                    <div class="col-xs-12">
+                                                        <input class="form-control" id="path"
+                                                               placeholder="路由地址.." required type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-xs-12" for="visible">权限显示状态</label>
+                                                    <div class="col-xs-12">
+                                                        <select class="form-control" id="visible" name="roleStatus"
+                                                                size="1">
+                                                            <option value="0">显示</option>
+                                                            <option value="1">隐藏</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-xs-12" for="status">权限状态</label>
+                                                    <div class="col-xs-12">
+                                                        <select class="form-control" id="status" name="status"
+                                                                size="1">
+                                                            <option value="0">正常</option>
+                                                            <option value="1">停用</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-xs-12" for="perms">权限标识</label>
+                                                    <div class="col-xs-12">
+                                                        <input class="form-control" id="perms"
+                                                               placeholder="权限标识.." required type="text">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-xs-12" for="remark">权限描述</label>
+                                                    <div class="col-xs-12">
+                                                        <textarea class="form-control" id="remark" name="remark"
+                                                                  placeholder="描述.." rows="6"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-xs-2">
+                                                        <button class="btn-sm btn-primary" id="menuSubmintBtn"
+                                                                type="button">提交
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <button class="btn-sm btn-warning" type="reset">清空</button>
+                                                    </div>
+                                                    <div class="col-xs-6">
+                                                        <button class="btn-sm btn-purple">
+                                                            <a data-toggle="tab" href="#profile-basic"
+                                                               style="color: white">权限列表</a>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+
+<script src="/static/admin/js/jquery.min.js" type="text/javascript"></script>
+<script src="/static/admin/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/static/admin/js/perfect-scrollbar.min.js" type="text/javascript"></script>
+<script src="/static/admin/js/main.js" type="text/javascript"></script>
+<script src="/static/admin/js/common.js"></script>
+<script>
+    function stopRole(id) {
+        let doajax = Doajax("/admin/stopRole", "get", {id: id});
+        console.log(doajax);
+        location.reload();  //实现页面重新加载
+    }
+    function stopMenu(id){
+        let doajax = Doajax("/admin/stopMenu", "get", {id: id});
+        console.log(doajax);
+        location.reload();  //实现页面重新加载
+    }
+    function deleteRole(id){
+        let doajax = Doajax("/admin/deleteRole","get",{id:id});
+        if(doajax.code===200){
+            alert("删除成功");
+        }
+
+    }
+    function deleteMenu(id){
+        if( confirm("是否删除该权限菜单")){
+            let doajax = Doajax("/admin/deleteMenu","get",{id:id});
+            if(doajax.code===200){
+                alert("删除成功");
+            }
+        }
+    }
+    function isFilling(check,id){
+        if(check){
+            let doajax = Doajax("/admin/getMenubyid","get",{
+                id:id
+            });
+            console.log(doajax);
+            let data = doajax.data;
+             $("#menuName").val(data.menuName);
+             $("#menuId").val(data.id);
+             $("#path").val(data.path);
+             $("#visible").val(data.visible);
+             $("#status").val(data.status);
+             $("#perms").val(data.perms);
+            $("#remark").val(data.remark);
+        }
+        else{
+            $("#menuName").val("");
+            $("#data.menuName").val("");
+            $("#perms").val("");
+            $("#remark").val("");
+        }
+
+    }
+
+    function isFillingRole(check,id){
+        if(check){
+            let doajax = Doajax("/admin/getRolebyid","get",{id:id});
+            let data = doajax.data;
+            console.log(doajax);
+             $("#roleName").val(data.name);
+             $("#roleKey").val(data.roleKey);
+             $("#roleStatus").val(data.status);
+             $("#roleId").val(data.id);
+        }
+        else{
+             $("#roleName").val("");
+             $("#roleKey").val("");
+             $("#roleStatus").val("");
+             $("#roleRemark").val("");
+        }
+
+    }
+    function renewRole(id) {
+        let doajax = Doajax("/admin/renewRole", "get", {id: id});
+        location.reload();  //实现页面重新加载
+    }
+    function renewMenu(id){
+        let doajax = Doajax("/admin/renewMenu", "get", {id: id});
+        location.reload();  //实现页面重新加载
+    }
+    $("#submintBtn").click(function () {
+        let rolename = $("#roleName").val();
+        let key = $("#roleKey").val();
+        let stus = $("#roleStatus").val();
+        let remark = $("#roleRemark").val();
+        if (rolename !== null && key !== null) {
+            let doajax = Doajax("/admin/updateRole", "post", {
+                id:$("#roleId").val(),
+                name: rolename,
+                roleKey: key,
+                status: stus,
+                remark: remark
+            });
+            console.log(doajax);
+
+        }
+    })
+    //更新menu
+    $("#menuSubmintBtn").click(function(){
+        let menuName = $("#menuName").val();
+        let path=  $("#path").val();
+        let visible = $("#visible").val();
+        let status = $("#status").val();
+        let perms= $("#perms").val();
+        let remark=  $("#remark").val();
+        Doajax("/admin/updateMenu","post",{
+            id:$("#menuId").val(),
+            menuName:menuName,
+            path:path,
+            visible:visible,
+            status:status,
+            perms:perms,
+            remark:remark
+        })
+    })
+
+    let $htmlInsert = $("#htmlInsert");
+    var temp=["正常","停用"];
+    function ShowMenu(id){
+        $htmlInsert.empty();
+        let doajax = Doajax("/admin/getRoleMenus","GET",{id:id});
+        let data = doajax.data;
+        console.log(data);
+        for (var i=0;i<data.length;i++){
+            let t=i+1;
+            let html="<tr ><th scope='row'>"+t+"</th><td>"+data[i].menuName+"</td><td>"+data[i].path+"</td><td>"+temp[data[i].status]+"</td><td>"+data[i].perms+"</td></tr>";
+            console.log(html);
+            $htmlInsert.append(html);
+        }
+    }
+</script>
+</body>
+</html>

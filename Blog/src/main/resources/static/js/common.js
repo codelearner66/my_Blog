@@ -16,18 +16,25 @@ function ajaxpost(url, data) {
         success: function (t) {
             for (const tKey in t) {
                 if (tKey === "data") {
-                    console.log("tKey---->" + tKey);
                     for (const tKeyKey in t.data) {
-                        console.log("tKeyKey---->" + tKeyKey);
+
                         if (tKeyKey === "token") {
                             localStorage.setItem("token", t.data.token);
-                            document.cookie = 'token_cookie=' + t.data.token;
-                            location.href = "/";
+                            location.href = "/user/";
                             break;
                         }
                     }
                     break;
                 }
+            }
+            if(t.code===200){
+                callback = t;
+            }
+            if (t.code===401) {
+                localStorage.removeItem("token");
+                // 前端清除cookies
+                document.cookie = 'token_cookie='+"";
+                location.href="/tologin";
             }
             callback = t;
         },
@@ -51,7 +58,15 @@ function supperLink(url, type) {
         type: type,
         url: url,
         success: function (t) {
-            callback = t;
+            if(t.code===200){
+                callback = t;
+            }
+            if (t.code===401) {
+                localStorage.removeItem("token");
+                // 前端清除cookies
+                document.cookie = 'token_cookie='+"";
+                location.href="/tologin";
+            }
         },
         error: function (e) {
             callback = e;
@@ -68,7 +83,15 @@ function Doajax(url, type, data) {
         url: url,
         data: data,
         success: function (t) {
-            callback = t;
+            if(t.code===200){
+                callback = t;
+            }
+            if (t.code===401) {
+                localStorage.removeItem("token");
+                // 前端清除cookies
+                document.cookie = 'token_cookie='+"";
+                location.href="/tologin";
+            }
         },
         error: function (e) {
             callback = e;
@@ -83,7 +106,6 @@ function Doajax(url, type, data) {
  */
 function pageTurns(url) {
     location.href = url;
-
 }
 
 /**
@@ -152,19 +174,22 @@ $("#modityUser").click(function () {
  * <!--帐号注销-->
  */
 $("#logout").click(function () {
-    $.ajax({
+    new $.zui.Messager('即将注销...', {
+        type: 'danger' // 定义颜色主题
+    }).show();
+    setTimeout(function() {
+        $.ajax({
         async: false,
         type: "GET",
         url: "/logout",
         success: function (t) {
             localStorage.removeItem("token");
-            window.location.reload();
-        },
-        error: function (e) {
-            callback = e;
+            location.href = "/";
         }
     });
-    window.location.reload();
+        location.href = "/";
+    },1500);
+
 })
 //分类下拉列表
 let $select = $("#select");
@@ -178,7 +203,7 @@ $select.mouseenter(function () {
     console.log(data)
     for (let i = 0; i < data.length; i++) {
         var html = "<div class='col-md-12 select-item'> "
-            + "<a href='/articleList/?pageNum=1&pageSize=10&categoryId=" + data[i].id + "'>" + data[i].name + "</a>"
+            + "<a href='/user/articleList/?pageNum=1&pageSize=10&categoryId=" + data[i].id + "'>" + data[i].name + "</a>"
             + "</div>";
         $("#h-hid").append(html);
     }
@@ -189,3 +214,7 @@ $select.mouseleave(function () {
     $h.slideUp();
     $h.empty();
 })
+
+function getCategoryList(){
+  return  supperLink("/category/category", "get").data;
+}

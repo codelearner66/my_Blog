@@ -1,0 +1,475 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <title>首页 - bootstrap中文后台管理系统模板</title>
+    <link href="favicon.ico" rel="icon" type="image/ico">
+    <link href="/static/admin/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/admin/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="/static/admin/css/style.css" rel="stylesheet">
+</head>
+
+<body data-logobg="color_8" data-sidebarbg="color_8">
+<div class="layout-web">
+    <div class="layout-container">
+        <!--左侧导航-->
+        <aside class="layout-sidebar" th:fragment="AsideNav">
+
+            <!-- logo -->
+            <div class="sidebar-header" id="logo">
+                <a href="/admin/"><img alt="" src="/static/admin/images/logo-sidebar.png" title=""/></a>
+            </div>
+            <div class="layout-sidebar-scroll">
+
+                <nav class="sidebar-main">
+                    <ul class="nav nav-drawer">
+                        <li class="nav-item active"><a href="/admin/"><i class="mdi mdi-home"></i>后台首页</a></li>
+
+                        <li class="nav-item nav-item-has-subnav">
+                            <a href="javascript:void(0)"><i class="mdi mdi-palette"></i>权限管理</a>
+                            <ul class="nav nav-subnav">
+                                <li><a href="/admin/role_menu?page=1&mpage=1&size=10&RorM=1">权限 / 角色</a></li>
+                                <li><a href="/admin/AdminManagement?isAdmin=1&page=1&size=10&aM=1">管理员管理</a></li>
+
+                                <li><a href="/admin/UserManagement?isAdmin=0&page=1&size=10&aM=1">用户管理</a></li>
+                                <li><a href="/admin/TempAuthorization?isAdmin=0&page=1&size=10">授权中心</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <p class="copyright">Copyright &copy; 2022. All rights <a href="http://www.bootstrapmb.com/">reserved</a>.
+                    </p>
+                </div>
+            </div>
+
+        </aside>
+        <!--End 左侧导航-->
+
+        <!--头部信息-->
+        <header class="layout-header" th:fragment="HeaderNav">
+
+            <nav class="navbar navbar-default">
+                <div class="topbar">
+
+                    <div class="topbar-left">
+                        <div class="aside-toggler">
+                            <span class="toggler-bar"></span>
+                            <span class="toggler-bar"></span>
+                            <span class="toggler-bar"></span>
+                        </div>
+                        <span class="navbar-page-title"> 后台首页 </span>
+                    </div>
+
+                    <ul class="topbar-right">
+                        <li class="dropdown dropdown-profile">
+                            <a data-toggle="dropdown" href="javascript:void(0)">
+                                <!--     管理员头像-->
+                                <img alt="管理员" class="img-avatar img-avatar-48 m-r-10" th:src="${headerImg}"/>
+                                <span>管理员 <span class="caret"></span></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="/admin/pages_profile"><i class="mdi mdi-account"></i> 个人信息</a></li>
+                                <li><a href="/admin/pages_edit_pwd"><i class="mdi mdi-lock-outline"></i> 修改密码</a></li>
+                                <li><a onclick="location.reload();"><i class="mdi mdi-delete"></i> 清空缓存</a></li>
+                                <li class="divider"></li>
+                                <li><a href="javascript:void (0)" id="logout"><i class="mdi mdi-logout-variant"></i>
+                                    退出登录</a></li>
+                            </ul>
+                        </li>
+                        <!--切换主题配色-->
+                        <li class="dropdown dropdown-skin">
+                            <span class="icon-palette" data-toggle="dropdown"><i class="mdi mdi-palette"></i></span>
+                            <ul class="dropdown-menu dropdown-menu-right" data-stopPropagation="true">
+                                <li class="drop-title"><p>主题</p></li>
+                                <li class="drop-skin-li clearfix">
+                  <span class="inverse">
+                    <input checked id="site_theme_1" name="site_theme" type="radio" value="default">
+                    <label for="site_theme_1"></label>
+                  </span>
+                                    <span>
+                    <input id="site_theme_2" name="site_theme" type="radio" value="dark">
+                    <label for="site_theme_2"></label>
+                  </span>
+                                    <span>
+                    <input id="site_theme_3" name="site_theme" type="radio" value="translucent">
+                    <label for="site_theme_3"></label>
+                  </span>
+                                </li>
+                                <li class="drop-title"><p>LOGO</p></li>
+                                <li class="drop-skin-li clearfix">
+                  <span class="inverse">
+                    <input checked id="logo_bg_1" name="logo_bg" type="radio" value="default">
+                    <label for="logo_bg_1"></label>
+                  </span>
+                                    <span>
+                    <input id="logo_bg_2" name="logo_bg" type="radio" value="color_2">
+                    <label for="logo_bg_2"></label>
+                  </span>
+                                    <span>
+                    <input id="logo_bg_3" name="logo_bg" type="radio" value="color_3">
+                    <label for="logo_bg_3"></label>
+                  </span>
+                                    <span>
+                    <input id="logo_bg_4" name="logo_bg" type="radio" value="color_4">
+                    <label for="logo_bg_4"></label>
+                  </span>
+                                    <span>
+                    <input id="logo_bg_5" name="logo_bg" type="radio" value="color_5">
+                    <label for="logo_bg_5"></label>
+                  </span>
+                                    <span>
+                    <input id="logo_bg_6" name="logo_bg" type="radio" value="color_6">
+                    <label for="logo_bg_6"></label>
+                  </span>
+                                    <span>
+                    <input id="logo_bg_7" name="logo_bg" type="radio" value="color_7">
+                    <label for="logo_bg_7"></label>
+                  </span>
+                                    <span>
+                    <input id="logo_bg_8" name="logo_bg" type="radio" value="color_8">
+                    <label for="logo_bg_8"></label>
+                  </span>
+                                </li>
+                                <li class="drop-title"><p>头部</p></li>
+                                <li class="drop-skin-li clearfix">
+                  <span class="inverse">
+                    <input checked id="header_bg_1" name="header_bg" type="radio" value="default">
+                    <label for="header_bg_1"></label>                      
+                  </span>
+                                    <span>
+                    <input id="header_bg_2" name="header_bg" type="radio" value="color_2">
+                    <label for="header_bg_2"></label>                      
+                  </span>
+                                    <span>
+                    <input id="header_bg_3" name="header_bg" type="radio" value="color_3">
+                    <label for="header_bg_3"></label>
+                  </span>
+                                    <span>
+                    <input id="header_bg_4" name="header_bg" type="radio" value="color_4">
+                    <label for="header_bg_4"></label>                      
+                  </span>
+                                    <span>
+                    <input id="header_bg_5" name="header_bg" type="radio" value="color_5">
+                    <label for="header_bg_5"></label>                      
+                  </span>
+                                    <span>
+                    <input id="header_bg_6" name="header_bg" type="radio" value="color_6">
+                    <label for="header_bg_6"></label>                      
+                  </span>
+                                    <span>
+                    <input id="header_bg_7" name="header_bg" type="radio" value="color_7">
+                    <label for="header_bg_7"></label>
+                  </span>
+                                    <span>
+                    <input id="header_bg_8" name="header_bg" type="radio" value="color_8">
+                    <label for="header_bg_8"></label>
+                  </span>
+                                </li>
+                                <li class="drop-title"><p>侧边栏</p></li>
+                                <li class="drop-skin-li clearfix">
+                  <span class="inverse">
+                    <input checked id="sidebar_bg_1" name="sidebar_bg" type="radio" value="default">
+                    <label for="sidebar_bg_1"></label>
+                  </span>
+                                    <span>
+                    <input id="sidebar_bg_2" name="sidebar_bg" type="radio" value="color_2">
+                    <label for="sidebar_bg_2"></label>
+                  </span>
+                                    <span>
+                    <input id="sidebar_bg_3" name="sidebar_bg" type="radio" value="color_3">
+                    <label for="sidebar_bg_3"></label>
+                  </span>
+                                    <span>
+                    <input id="sidebar_bg_4" name="sidebar_bg" type="radio" value="color_4">
+                    <label for="sidebar_bg_4"></label>
+                  </span>
+                                    <span>
+                    <input id="sidebar_bg_5" name="sidebar_bg" type="radio" value="color_5">
+                    <label for="sidebar_bg_5"></label>
+                  </span>
+                                    <span>
+                    <input id="sidebar_bg_6" name="sidebar_bg" type="radio" value="color_6">
+                    <label for="sidebar_bg_6"></label>
+                  </span>
+                                    <span>
+                    <input id="sidebar_bg_7" name="sidebar_bg" type="radio" value="color_7">
+                    <label for="sidebar_bg_7"></label>
+                  </span>
+                                    <span>
+                    <input id="sidebar_bg_8" name="sidebar_bg" type="radio" value="color_8">
+                    <label for="sidebar_bg_8"></label>
+                  </span>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--切换主题配色-->
+                    </ul>
+
+                </div>
+            </nav>
+
+        </header>
+        <!--End 头部信息-->
+
+        <!--页面主要内容-->
+        <main class="layout-content">
+
+            <div class="container-fluid">
+                <div aria-labelledby="myLargeModalLabel" class="modal fade" id="myModal" role="dialog" tabindex="-1">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content" >
+                            <div class="modal-header">
+                                <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="gridSystemModalLabel">文章详情</h4>
+                            </div>
+                            <div class="modal-body" id="modalContent">
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card bg-primary">
+                            <div class="card-body clearfix">
+                                <div class="pull-right">
+                                    <p class="h6 text-white m-t-0">文章总数</p>
+                                    <p class="h3 text-white m-b-0" id="ArticleTotle">102,125.00</p>
+                                </div>
+                                <div class="pull-left"><span class="img-avatar img-avatar-48 bg-translucent"><i
+                                        class="mdi mdi-currency-cny fa-1-5x"></i></span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card bg-danger">
+                            <div class="card-body clearfix">
+                                <div class="pull-right">
+                                    <p class="h6 text-white m-t-0">用户总数</p>
+                                    <p class="h3 text-white m-b-0" id="UserTotle">920,000</p>
+                                </div>
+                                <div class="pull-left"><span class="img-avatar img-avatar-48 bg-translucent"><i
+                                        class="mdi mdi-account fa-1-5x"></i></span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card bg-success">
+                            <div class="card-body clearfix">
+                                <div class="pull-right">
+                                    <p class="h6 text-white m-t-0">文章浏览总量</p>
+                                    <p class="h3 text-white m-b-0" id="ArticleBroTotle">34,005,000</p>
+                                </div>
+                                <div class="pull-left"><span class="img-avatar img-avatar-48 bg-translucent"><i
+                                        class="mdi mdi-arrow-down-bold fa-1-5x"></i></span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card bg-purple">
+                            <div class="card-body clearfix">
+                                <div class="pull-right">
+                                    <p class="h6 text-white m-t-0">待审核文章</p>
+                                    <p class="h3 text-white m-b-0" id="newArticles">153 </p>
+                                </div>
+                                <div class="pull-left"><span class="img-avatar img-avatar-48 bg-translucent"><i
+                                        class="mdi mdi-comment-outline fa-1-5x"></i></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>用户增长</h4>
+                            </div>
+                            <div class="card-body">
+                                <canvas class="js-chartjs-bars"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>每日新增博文记录</h4>
+                            </div>
+                            <div class="card-body">
+                                <canvas class="js-chartjs-lines"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>文章审核</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>文章名称</th>
+                                            <th>创建日期</th>
+                                            <th>分类</th>
+                                            <th>文章详情</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="article,item: ${articleListVo}">
+                                            <td th:text="${item.index+1}">/td>
+                                            <td th:text="${article.title}">设计新主题</td>
+                                            <td  th:text="${#dates.format(article.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                                            <td th:text="${article.categoryName}"></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary"   th:onclick="'showModelPandel('+${article.id}+')'"
+                                                        type="button">查看
+                                                </button>
+                                            </td>
+                                            <td><span class="label label-warning">待审查</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-success"   th:onclick="'handle('+${article.id}+','+'\'/admin/passArticle\''+')'"
+                                                        type="button">通过
+                                                </button>
+                                                <button class="btn btn-sm btn-danger"   th:onclick="'handle('+${article.id}+','+'\'/admin/deleteArticle\''+')'"
+                                                        type="button">驳回删除
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+
+<script src="/static/admin/js/jquery.min.js" type="text/javascript"></script>
+<script src="/static/admin/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/static/admin/js/perfect-scrollbar.min.js" type="text/javascript"></script>
+<script src="/static/admin/js/main.js" type="text/javascript"></script>
+<script src="/static/admin/js/common.js"></script>
+
+<!--图表插件-->
+<script src="/static/admin/js/Chart.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').focus()
+    })
+
+    $(document).ready(function (e) {
+        $("#ArticleTotle").text(Doajax("/admin/getArticleTotle", "get", {}).data);
+        $("#UserTotle").text(Doajax("/admin/getUserTotle", "get", {}).data);
+        $("#ArticleBroTotle").text(Doajax("/admin/getArticleBroTotle", "get", {}).data);
+        $("#newArticles").text(Doajax("/admin/getNewArticlesTotle", "get", {}).data + "条");
+
+        list = Doajax("/admin/getUserDailyadd", "get", {}).data;
+        var labels = [];
+        var data = [];
+        for (var i = 0; i < list.length; i++) {
+            labels[i] = list[i].time;
+            data[i] = list[i].count;
+        }
+        var $dashChartBarsCnt = jQuery('.js-chartjs-bars')[0].getContext('2d'),
+            $dashChartLinesCnt = jQuery('.js-chartjs-lines')[0].getContext('2d');
+
+        var $dashChartBarsData = {
+            labels: labels,
+            datasets: [
+                {
+                    label: '注册用户',
+                    borderWidth: 1,
+                    borderColor: 'rgba(0,0,0,0)',
+                    backgroundColor: 'rgba(51,202,185,0.5)',
+                    hoverBackgroundColor: "rgba(51,202,185,0.7)",
+                    hoverBorderColor: "rgba(0,0,0,0)",
+                    data: data
+                }
+            ]
+        };
+
+        list1 = Doajax("/admin/getNewDailyArticles", "get", {}).data;
+        var labels1 = [];
+        var data1 = [];
+        for (var i = 0; i < list1.length; i++) {
+            labels1[i] = list1[i].time;
+            data1[i] = list1[i].count;
+        }
+        var $dashChartLinesData = {
+            labels: labels1,
+            datasets: [
+                {
+                    label: '每日新增博文',
+                    data: data1,
+                    borderColor: '#358ed7',
+                    backgroundColor: 'rgba(53, 142, 215, 0.175)',
+                    borderWidth: 1,
+                    fill: false,
+                    lineTension: 0.5
+                }
+            ]
+        };
+
+        new Chart($dashChartBarsCnt, {
+            type: 'bar',
+            data: $dashChartBarsData
+        });
+
+        new Chart($dashChartLinesCnt, {
+            type: 'line',
+            data: $dashChartLinesData,
+        });
+    });
+
+    function showModelPandel(id) {
+        let doajax = Doajax("/article/" + id, "get", {});
+        $("#modalContent").html(doajax.data.content);
+        $('#myModal').modal('toggle')
+    }
+function  handle(id,url){
+        if(confirm("确定执行该操作？")) {
+            //todo 后端未实现
+            let doajax = Doajax(url,"get",{
+                id: id
+            });
+            if(doajax.code===200){
+                pageTurns("/admin/");
+            }
+            else {
+                alert(doajax.msg);
+            }
+    }
+}
+</script>
+</body>
+</html>

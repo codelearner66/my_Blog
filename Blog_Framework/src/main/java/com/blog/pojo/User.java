@@ -1,16 +1,18 @@
 package com.blog.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import org.jetbrains.annotations.NotNull;
 
+import javax.validation.constraints.Email;
 import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @TableName("sys_user")
 public class User  {
     //主键@TableId
@@ -22,15 +24,16 @@ public class User  {
     //昵称
     private String nickName;
     //密码
-    @NotNull
     private String password;
     //用户类型：0代表普通用户，1代表管理员
     private String type;
     //账号状态（0正常 1停用）
     private String status;
     //邮箱
+    @Email
     private String email;
     //手机号
+    @Length(min = 11)
     private String phonenumber;
     //用户性别（0男，1女，2未知）
     private String sex;

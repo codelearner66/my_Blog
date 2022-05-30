@@ -3,7 +3,7 @@ $(function () {
         $('#forgot').toggleClass('toggle')
     })
 
-    $('.registerBtn').click(function () {
+$('.registerBtn').click(function () {
         $('#register, #formContainer').toggleClass('toggle')
     })
 })

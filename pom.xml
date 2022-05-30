@@ -9,7 +9,6 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>Blog_admin</module>
         <module>Blog_Framework</module>
         <module>Blog</module>
     </modules>
@@ -20,7 +19,6 @@
     </properties>
 
     <dependencyManagement>
-
 
         <dependencies>
             <!-- SpringBoot的依赖配置-->

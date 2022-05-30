@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace属性是名称空间，必须唯一 -->
+<mapper namespace="com.blog.mapper.UserMapper">
+	<select id="getUsersCount" resultType="com.blog.vo.UserCount">
+		SELECT DATE_FORMAT(create_time,'%Y-%m-%d') as time , count(*) as count FROM `sys_user` GROUP BY  time;
+	</select>
+	<select id="getSamthingCount"  resultType="com.blog.vo.UserCount">
+		SELECT DATE_FORMAT(create_time,'%Y-%m-%d') as time , count(*) as count FROM ${tableName} GROUP BY  time;
+	</select>
+</mapper>

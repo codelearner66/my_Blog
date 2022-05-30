@@ -1,0 +1,90 @@
+2022-05-30 12:52:12.154 INFO [background-preinit] org.hibernate.validator.internal.util.Version : HV000001: Hibernate Validator 6.2.0.Final
+2022-05-30 12:52:12.179 INFO [main] com.blog.My_BlogApplication : Starting My_BlogApplication using Java 15.0.1 on DESKTOP-MCI9I2S with PID 18496 (E:\jee-2020-092\spring boot\my_Blog\Blog\target\classes started by 86176 in E:\jee-2020-092\spring boot\my_Blog)
+2022-05-30 12:52:12.182 INFO [main] com.blog.My_BlogApplication : No active profile set, falling back to default profiles: default
+2022-05-30 12:52:14.396 INFO [main] org.apache.coyote.http11.Http11NioProtocol : Initializing ProtocolHandler ["http-nio-8081"]
+2022-05-30 12:52:14.396 INFO [main] org.apache.catalina.core.StandardService : Starting service [Tomcat]
+2022-05-30 12:52:14.397 INFO [main] org.apache.catalina.core.StandardEngine : Starting Servlet engine: [Apache Tomcat/9.0.46]
+2022-05-30 12:52:14.537 INFO [main] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] : Initializing Spring embedded WebApplicationContext
+2022-05-30 12:52:15.920 WARN [main] com.baomidou.mybatisplus.core.injector.DefaultSqlInjector : class com.blog.pojo.SysUserRole ,Not found @TableId annotation, Cannot use Mybatis-Plus 'xxById' Method.
+2022-05-30 12:52:16.278 WARN [main] com.baomidou.mybatisplus.core.injector.DefaultSqlInjector : class com.blog.pojo.SysRoleMenu ,Not found @TableId annotation, Cannot use Mybatis-Plus 'xxById' Method.
+2022-05-30 12:52:17.290 INFO [main] org.apache.coyote.http11.Http11NioProtocol : Starting ProtocolHandler ["http-nio-8081"]
+2022-05-30 12:52:17.324 INFO [main] com.blog.My_BlogApplication : Started My_BlogApplication in 5.536 seconds (JVM running for 8.557)
+2022-05-30 12:53:34.277 INFO [http-nio-8081-exec-1] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-05-30 12:53:41.618 INFO [http-nio-8081-exec-4] com.alibaba.druid.pool.DruidDataSource : {dataSource-1} inited
+2022-05-30 12:54:19.037 INFO [http-nio-8081-exec-7] com.blog.aopLog.AopLog : =======Start=======
+2022-05-30 12:54:19.038 INFO [http-nio-8081-exec-7] com.blog.aopLog.AopLog : URL            : http://localhost:8081/admin/getArticleTotle
+2022-05-30 12:54:19.039 INFO [http-nio-8081-exec-7] com.blog.aopLog.AopLog : BusinessName   : 获取文章总数
+2022-05-30 12:54:19.039 INFO [http-nio-8081-exec-7] com.blog.aopLog.AopLog : HTTP Method    : GET
+2022-05-30 12:54:19.039 INFO [http-nio-8081-exec-7] com.blog.aopLog.AopLog : Class Method   : com.blog.controller.admin.restController.AdminIndexController.getArticleTotle
+2022-05-30 12:54:19.039 INFO [http-nio-8081-exec-7] com.blog.aopLog.AopLog : IP             : 0:0:0:0:0:0:0:1
+2022-05-30 12:54:19.040 INFO [http-nio-8081-exec-7] com.blog.aopLog.AopLog : UserID         : 1
+2022-05-30 12:54:19.040 INFO [http-nio-8081-exec-7] com.blog.aopLog.AopLog : Request Args   : []
+2022-05-30 12:54:19.046 INFO [http-nio-8081-exec-7] com.blog.aopLog.AopLog : Response       : {msg=操作成功, code=200, data=10}
+2022-05-30 12:54:19.046 INFO [http-nio-8081-exec-7] com.blog.aopLog.AopLog : =======End=======
+
+2022-05-30 12:54:19.054 INFO [http-nio-8081-exec-6] com.blog.aopLog.AopLog : =======Start=======
+2022-05-30 12:54:19.054 INFO [http-nio-8081-exec-6] com.blog.aopLog.AopLog : URL            : http://localhost:8081/admin/getUserTotle
+2022-05-30 12:54:19.055 INFO [http-nio-8081-exec-6] com.blog.aopLog.AopLog : BusinessName   : 获取用户总数
+2022-05-30 12:54:19.055 INFO [http-nio-8081-exec-6] com.blog.aopLog.AopLog : HTTP Method    : GET
+2022-05-30 12:54:19.055 INFO [http-nio-8081-exec-6] com.blog.aopLog.AopLog : Class Method   : com.blog.controller.admin.restController.AdminIndexController.getUserTotle
+2022-05-30 12:54:19.055 INFO [http-nio-8081-exec-6] com.blog.aopLog.AopLog : IP             : 0:0:0:0:0:0:0:1
+2022-05-30 12:54:19.055 INFO [http-nio-8081-exec-6] com.blog.aopLog.AopLog : UserID         : 1
+2022-05-30 12:54:19.055 INFO [http-nio-8081-exec-6] com.blog.aopLog.AopLog : Request Args   : []
+2022-05-30 12:54:19.057 INFO [http-nio-8081-exec-6] com.blog.aopLog.AopLog : Response       : {msg=操作成功, code=200, data=7}
+2022-05-30 12:54:19.057 INFO [http-nio-8081-exec-6] com.blog.aopLog.AopLog : =======End=======
+
+2022-05-30 12:54:19.064 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : =======Start=======
+2022-05-30 12:54:19.064 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : URL            : http://localhost:8081/admin/getArticleBroTotle
+2022-05-30 12:54:19.064 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : BusinessName   : 获取文章总浏览量
+2022-05-30 12:54:19.064 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : HTTP Method    : GET
+2022-05-30 12:54:19.064 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : Class Method   : com.blog.controller.admin.restController.AdminIndexController.getArticleBroTotle
+2022-05-30 12:54:19.065 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : IP             : 0:0:0:0:0:0:0:1
+2022-05-30 12:54:19.065 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : UserID         : 1
+2022-05-30 12:54:19.065 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : Request Args   : []
+2022-05-30 12:54:19.077 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : Response       : {msg=操作成功, code=200, data=292}
+2022-05-30 12:54:19.078 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : =======End=======
+
+2022-05-30 12:54:19.085 INFO [http-nio-8081-exec-4] com.blog.aopLog.AopLog : =======Start=======
+2022-05-30 12:54:19.085 INFO [http-nio-8081-exec-4] com.blog.aopLog.AopLog : URL            : http://localhost:8081/admin/getNewArticlesTotle
+2022-05-30 12:54:19.085 INFO [http-nio-8081-exec-4] com.blog.aopLog.AopLog : BusinessName   : 获取新增文章总数
+2022-05-30 12:54:19.085 INFO [http-nio-8081-exec-4] com.blog.aopLog.AopLog : HTTP Method    : GET
+2022-05-30 12:54:19.085 INFO [http-nio-8081-exec-4] com.blog.aopLog.AopLog : Class Method   : com.blog.controller.admin.restController.AdminIndexController.getNewArticlesTotle
+2022-05-30 12:54:19.085 INFO [http-nio-8081-exec-4] com.blog.aopLog.AopLog : IP             : 0:0:0:0:0:0:0:1
+2022-05-30 12:54:19.085 INFO [http-nio-8081-exec-4] com.blog.aopLog.AopLog : UserID         : 1
+2022-05-30 12:54:19.085 INFO [http-nio-8081-exec-4] com.blog.aopLog.AopLog : Request Args   : []
+2022-05-30 12:54:19.088 INFO [http-nio-8081-exec-4] com.blog.aopLog.AopLog : Response       : {msg=操作成功, code=200, data=0}
+2022-05-30 12:54:19.088 INFO [http-nio-8081-exec-4] com.blog.aopLog.AopLog : =======End=======
+
+2022-05-30 12:54:19.096 INFO [http-nio-8081-exec-2] com.blog.aopLog.AopLog : =======Start=======
+2022-05-30 12:54:19.097 INFO [http-nio-8081-exec-2] com.blog.aopLog.AopLog : URL            : http://localhost:8081/admin/getUserDailyadd
+2022-05-30 12:54:19.097 INFO [http-nio-8081-exec-2] com.blog.aopLog.AopLog : BusinessName   : 获取每日用户增加
+2022-05-30 12:54:19.097 INFO [http-nio-8081-exec-2] com.blog.aopLog.AopLog : HTTP Method    : GET
+2022-05-30 12:54:19.097 INFO [http-nio-8081-exec-2] com.blog.aopLog.AopLog : Class Method   : com.blog.controller.admin.restController.AdminIndexController.getUserDailyadd
+2022-05-30 12:54:19.097 INFO [http-nio-8081-exec-2] com.blog.aopLog.AopLog : IP             : 0:0:0:0:0:0:0:1
+2022-05-30 12:54:19.097 INFO [http-nio-8081-exec-2] com.blog.aopLog.AopLog : UserID         : 1
+2022-05-30 12:54:19.097 INFO [http-nio-8081-exec-2] com.blog.aopLog.AopLog : Request Args   : []
+2022-05-30 12:54:19.105 INFO [http-nio-8081-exec-2] com.blog.aopLog.AopLog : Response       : {msg=操作成功, code=200, data=[{count=2, time=2022-01-05}, {count=1, time=2022-01-16}, {count=1, time=2022-01-30}, {count=2, time=2022-03-24}]}
+2022-05-30 12:54:19.106 INFO [http-nio-8081-exec-2] com.blog.aopLog.AopLog : =======End=======
+
+2022-05-30 12:54:19.112 INFO [http-nio-8081-exec-10] com.blog.aopLog.AopLog : =======Start=======
+2022-05-30 12:54:19.113 INFO [http-nio-8081-exec-10] com.blog.aopLog.AopLog : URL            : http://localhost:8081/admin/getNewDailyArticles
+2022-05-30 12:54:19.113 INFO [http-nio-8081-exec-10] com.blog.aopLog.AopLog : BusinessName   : 获取每日文章增加
+2022-05-30 12:54:19.113 INFO [http-nio-8081-exec-10] com.blog.aopLog.AopLog : HTTP Method    : GET
+2022-05-30 12:54:19.113 INFO [http-nio-8081-exec-10] com.blog.aopLog.AopLog : Class Method   : com.blog.controller.admin.restController.AdminIndexController.getNewDailyArticles
+2022-05-30 12:54:19.113 INFO [http-nio-8081-exec-10] com.blog.aopLog.AopLog : IP             : 0:0:0:0:0:0:0:1
+2022-05-30 12:54:19.113 INFO [http-nio-8081-exec-10] com.blog.aopLog.AopLog : UserID         : 1
+2022-05-30 12:54:19.113 INFO [http-nio-8081-exec-10] com.blog.aopLog.AopLog : Request Args   : []
+2022-05-30 12:54:19.116 INFO [http-nio-8081-exec-10] com.blog.aopLog.AopLog : Response       : {msg=操作成功, code=200, data=[{count=1, time=2022-04-22}, {count=1, time=2022-01-21}, {count=1, time=2022-05-06}, {count=1, time=2022-04-27}, {count=4, time=2022-04-16}, {count=1, time=2022-04-26}, {count=1, time=2022-05-15}, {count=2, time=2022-05-16}]}
+2022-05-30 12:54:19.117 INFO [http-nio-8081-exec-10] com.blog.aopLog.AopLog : =======End=======
+
+2022-05-30 12:55:12.704 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : =======Start=======
+2022-05-30 12:55:12.704 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : URL            : http://localhost:8081/admin/getRoleMenus
+2022-05-30 12:55:12.704 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : BusinessName   : 获取角色权限
+2022-05-30 12:55:12.704 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : HTTP Method    : GET
+2022-05-30 12:55:12.704 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : Class Method   : com.blog.controller.admin.restController.RoleAndMenuRestController.getRoleMenus
+2022-05-30 12:55:12.704 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : IP             : 0:0:0:0:0:0:0:1
+2022-05-30 12:55:12.704 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : UserID         : 1
+2022-05-30 12:55:12.704 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : Request Args   : ["1"]
+2022-05-30 12:55:12.724 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : Response       : {msg=操作成功, code=200, data=[{visible=0, icon=#, menuName=查看博文详情, remark=null, updateTime=null, delFlag=0, path=null, component=null, createBy=null, createTime=null, updateBy=null, perms=user_article, id=1, status=0}, {visible=0, icon=#, menuName=进入后台, remark=null, updateTime=null, delFlag=0, path=/admin/, component=null, createBy=null, createTime=null, updateBy=null, perms=admin_basic, id=2, status=0}, {visible=0, icon=#, menuName=后台按钮页面, remark=null, updateTime=null, delFlag=0, path=/ui_buttons, component=null, createBy=null, createTime=null, updateBy=null, perms=admin_buttons, id=3, status=0}, {visible=0, icon=#, menuName=角色和权限页面, remark=null, updateTime=null, delFlag=0, path=/admin/, component=null, createBy=null, createTime=null, updateBy=null, perms=admin_roleAndMenu, id=4, status=0}, {visible=0, icon=#, menuName=进入管理员管理页面, remark=, updateTime=null, delFlag=0, path=/admin/management, component=null, createBy=null, createTime=null, updateBy=null, perms=admin_managerement, id=5, status=0}]}
+2022-05-30 12:55:12.725 INFO [http-nio-8081-exec-1] com.blog.aopLog.AopLog : =======End=======
+

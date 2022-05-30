@@ -1,3 +1,4 @@
+
 server:
   port: 8081
 spring:
@@ -6,17 +7,38 @@ spring:
     username: root
     password: ccx2019
     driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    #Spring Boot 默认是不注入这些属性值的，需要自己绑定
+    #druid 数据源专有配置
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    #配置监控统计拦截的filters，stat:监控统计、log4j：日志记录、wall：防御sql注入
+    #如果允许时报错  java.lang.ClassNotFoundException: org.apache.log4j.Priority
+    #则导入 log4j 依赖即可，Maven 地址：https://mvnrepository.com/artifact/log4j/log4j
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
 #  文件上传设置
   servlet:
     multipart:
-      max-file-size: 2MB
+      max-file-size: 5MB
       max-request-size: 5MB
   #指定静态资源路径
   mvc:
     static-path-pattern: static/**
   thymeleaf:
     cache: false
-#  集成邮件发送
+  #  集成邮件发送
   mail:
     host: smtp.qq.com
     username: chenbyf1314@foxmail.com
@@ -33,9 +55,13 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
       id-type: auto
+  mapper-locations: classpath*:/mapper/**/*.xml
 #七牛云 配置
 oss:
   accessKey: T0LNWjKSGk-Wa4y6BjKevQqWBg15SiTPGpjI7bfn
   secretKey: XBJv65L6q6arOyYOhgJuhCgcD_hp53eJwKudRsF9
   bucket: ccxprojests01
-
+logging:
+  config: classpath:log4j2.xml
+#AppSecret: 5d33c72b7001b59cefa60c2c5b1f7fc1
+#APPID: wx3452a83ad6c9daf0

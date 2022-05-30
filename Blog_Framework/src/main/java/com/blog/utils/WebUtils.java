@@ -22,6 +22,7 @@ public class WebUtils
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             response.getWriter().print(string);
+
         }
         catch (IOException e)
         {

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>登录注册忘记密码页面</title>
+  <link type="text/css" rel="stylesheet" th:href="@{/static/css/normalize.css}">
+  <link type="text/css" rel="stylesheet" th:href="@{/static/css/style.css}">
+</head>
+
+<body>
+<div id="formContainer" class="dwo">
+  <div class="formLeft">
+    <img th:src="@{/static/images/avatar.png}" alt="tt"/>
+  </div>
+  <div class="formRight">
+    <!-- Forgot password form -->
+    <form id="forgot" class="otherForm">
+      <header>
+        <h1>忘记密码</h1>
+        <p>输入邮箱找回密码</p>
+      </header>
+      <section>
+        <label>
+          <p>邮箱</p>
+          <input th:id="emailnumber" type="email" placeholder=" ">
+          <div class="border"></div>
+        </label>
+        <button th:id="emailSubmit" type="submit">发送邮件</button>
+      </section>
+      <footer>
+        <button type="button" class="forgotBtn">返回</button>
+      </footer>
+    </form>
+
+    <!-- Login form -->
+    <form id="login">
+      <header>
+        <h1>欢迎回来</h1>
+        <p>请先登录</p>
+      </header>
+      <section>
+        <label>
+          <p>用户名</p>
+          <input type="text" id="name" name="userName" required="required" placeholder=" ">
+          <div class="border"></div>
+        </label>
+        <label>
+          <p>密码</p>
+          <input type="password" id="passwd" name="password" required="required" placeholder=" ">
+          <div class="border"></div>
+        </label>
+        <button id="submit" type="button">登 录</button>
+      </section>
+      <footer>
+        <button type="button" class="forgotBtn">忘记密码？</button>
+        <button type="button" class="registerBtn">新用户？</button>
+      </footer>
+    </form>
+
+    <!-- Register form -->
+    <form id="register" class="otherForm">
+      <header>
+        <h1>用户注册</h1>
+        <p>注册后享受更多服务</p>
+      </header>
+      <section>
+        <label>
+          <p>用户名</p>
+          <input type="text" id="newname" placeholder=" ">
+          <div class="border"></div>
+        </label>
+        <label>
+          <p>邮箱</p>
+          <input type="email" id="email" placeholder=" ">
+          <div class="border"></div>
+        </label>
+        <label>
+          <p>密码</p>
+          <input type="password" id="pass" placeholder=" ">
+          <div class="border"></div>
+        </label>
+        <label>
+          <p>重复密码</p>
+          <input type="password" id="repass" placeholder=" ">
+          <div class="border"></div>
+        </label>
+        <button id="regist" type="button">注 册</button>
+      </section>
+      <footer>
+        <button type="button" class="registerBtn">返回</button>
+      </footer>
+    </form>
+  </div>
+</div>
+<script type="text/javascript" th:src="@{/static/js/jquery.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/script.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/remember.js}"></script>
+</body>
+<script>
+  $("#submit").click(function() {
+    let userName = $("#name").val();
+    let password = $("#passwd").val();
+    let ajaxpost1 = ajaxpost("/login",{"userName":userName, "password":password});
+    alert(ajaxpost1.msg);
+  })
+  $("#regist").click(function() {
+    let newname = $("#newname").val();
+    let email = $("#email").val();
+    let pass = $("#pass").val();
+    let repass = $("#repass").val();
+    if(repass.length<6||pass.length <6){
+      alert("密码不符合规范...");
+      $("#pass").onfocus();
+      return;
+    }
+    if (repass!==pass) {
+      alert("两次密码输入不一致！请检查...");
+      $("#pass").onfocus();
+      return;
+    }
+    let callback = ajaxpost("/register",{
+      "userName":newname,
+      "password":pass,
+      "email":email,
+    });
+    if (callback.code===200) {
+      location.href="/tologin";
+    }else {
+        alert(callback.msg)
+    }
+  })
+  $("#emailSubmit").click(function() {
+      let val = $("#emailnumber").val();
+    $.ajax({
+      async: false,
+      type: "POST",
+      url: "/findpass",
+      data: {"email":val},
+      success: function (t) {
+        location.href = "/login.html";
+      },
+      error: function (e) {
+        alert(e.msg);
+      }
+    });
+  })
+</script>
+</html>

@@ -15,7 +15,9 @@ public enum AppHttpCodeEnum {
     CONTENT_NOT_NULL(506, "评论内容不能为空"),
     FILE_TYPE_ERROR(507, "文件类型错误，请上传png文件"),
     FILE_SIZE_ERROR(508,"文件大小超过限制"),
+    ACCOUNT_LOCKED(600,"账号锁定"),
     LOGIN_ERROR(505,"用户名或密码错误");
+
     int code;
     String msg;
 

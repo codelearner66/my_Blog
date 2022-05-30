@@ -13,14 +13,22 @@
             url: "/login",
             headers: {'token': item},
             success : function(t) {
-                if(t.code===500){
-                    location.href="/";//有用！
+                if(t.code===200){
+                    location.href="/user";//有用！
                 }
                else{
                     localStorage.removeItem("token");
-                    window.location.reload();
+                    // 前端清除cookies
+                    document.cookie = 'token_cookie='+"";
+                    alert("请手动登录！");
                 }
+            },
+            error : function(t) {
+                localStorage.removeItem("token");
+                //todo 前端清除cookies
+                document.cookie = 'token_cookie='+"";
             }
+
         });
     }
 })();

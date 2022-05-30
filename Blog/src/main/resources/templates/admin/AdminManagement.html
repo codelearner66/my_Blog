@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <title>角色/权限 - bootstrap中文后台管理系统模板</title>
+    <link href="favicon.ico" rel="icon" type="image/ico">
+    <link href="/static/admin/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/admin/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="/static/admin/css/style.css" rel="stylesheet">
+    <script src="/static/js/vue.js"></script>
+</head>
+<body data-logobg="color_8" data-sidebarbg="color_8">
+<div class="layout-web" id="app">
+    <div class="layout-container">
+        <div th:replace="admin/index::AsideNav"></div>
+        <div th:replace="admin/index::HeaderNav"></div>
+        <!--页面主要内容-->
+        <main class="layout-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-offset-3 col-lg-6">
+                        <form class="form-inline" action="/admin/AdminSerach">
+                            <select class="form-group form-control" id="serach_select" name="type" size="1">
+                                <option value="0">搜索方式</option>
+                                <option value="1">搜索id</option>
+                                <option value="2">搜索用户名</option>
+                                <option value="3">混合搜索</option>
+                            </select>
+                            <div class="form-group">
+                                <input class="form-control input-sm" id="forAdminId" name="msg" placeholder="请输入您的搜索关键词..." type="text">
+                            </div>
+                            <input type="hidden" name="isAdmin" value="1">
+                            <button class="btn btn-sm btn-success" type="submit">搜索</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="gridSystemModal">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="gridSystemModalLabel">角色</h4>
+                            </div>
+                            <div class="modal-body">
+                                    <div class="">
+                                        <table class="table table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>角色名</th>
+                                                <th>角色权限字符串</th>
+                                                <th>角色状态</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="htmlInsert"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row-fluid">
+                    <ul class="nav nav-tabs nav-justified">
+                        <li th:class="${aM}=='1'? 'active':'nav-item'">
+                            <a data-toggle="tab" href="#adlist">管理员列表</a>
+                        </li>
+                        <li th:class="${aM}=='2'? 'active':'nav-item'">
+                            <a data-toggle="tab" th:onclick="'isFillingAdmin('+'false'+','+''+')'"  href="#modAd">新增管理员</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="adlist" th:class="${aM}=='1' ? 'tab-pane fade active in':'tab-pane fade'">
+                        <table class="table table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>用户名</th>
+                                <th>昵称</th>
+                                <th>账号状态</th>
+                                <th>邮箱</th>
+                                <th>手机号</th>
+                                <th>用户性别</th>
+                                <th>头像</th>
+                                <th>角色</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="admin,item: ${adminList.list}">
+                                <th scope="row" th:text="${item.index+1}">1</th>
+                                <td th:text="${admin.userName}"></td>
+                                <td th:text="${admin.nickName}"></td>
+                                <td th:text="${admin.status} eq  '0' ?  '正常': '停用'"></td>
+                                <td th:text="${admin.email}"></td>
+                                <td th:text="${admin.phonenumber}"></td>
+                                <td th:text="${admin.sex} eq  '0' ?  '男': '女'"></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn  btn-sm">查看头像</button>
+                                        <button class="btn  btn-sm dropdown-toggle" data-toggle="dropdown"><span
+                                                class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a style="padding-left: 25%" th:href="@{''+${admin.avatar}}">
+                                                    <img alt="头像" style="width: 70px;height: 70px" th:src="@{''+${admin.avatar}}"/>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary btn-sm"
+                                            th:onclick="'ShowRole('+${admin.id}+')'"
+                                            data-toggle="modal" data-target="#gridSystemModal">
+                                        查看角色
+                                    </button>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm">操作</button>
+                                        <button class="btn  btn-sm dropdown-toggle" data-toggle="dropdown"><span
+                                                class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a  data-toggle="tab" href="#modAd" style="color: #f0a126"
+                                                   th:onclick="'isFillingAdmin('+'true'+','+${admin.id}+')'">修改管理员</a>
+                                            </li>
+                                            <li>
+                                                <a class="btn-sm " style="color: #d81818"
+                                                   th:onclick="'deleteAdmin('+${admin.id}+')'" type="button">删除管理员</a>
+                                            </li>
+                                            <li>
+                                                <a class="btn-sm " style="color: #f76a6a"
+                                                   th:onclick="'stopAdmin('+${admin.id}+')'" type="button">停用管理员
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="btn-sm " style="color: #3fdb5a"
+                                                   th:onclick="'reNewAdmin('+${admin.id}+')'" type="button">恢复管理员
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="card-body">
+                            <nav>
+                             <ul class="pagination no-border" style="margin: 0 25%">
+                                <li th:class="${adminList.pre}==true? '' : 'disabled'">
+                                    <a th:href="${adminList.pre}==true? @{'/admin/AdminManagement?isAdmin=1&page='+${adminList.current-1}+'&size=10&aM=1'}:'#!'">
+                                        <span><i class="mdi mdi-chevron-left"></i></span>
+                                    </a>
+                                </li>
+                                <li th:class="${adminList.current}==${index.index+1} ? 'active' : '' "
+                                    th:each="it,index:${adminList.total}">
+                                    <a th:href="@{'/admin/AdminManagement?isAdmin=1&page='+${index.index+1}+'&size=10&aM=1'}"
+                                       th:text="${index.index+1}"></a>
+                                </li>
+                                <li th:class="${adminList.next}==true? '' : 'disabled'">
+                                    <a th:href="${adminList.next}==true? @{'/admin/AdminManagement?isAdmin=1&page='+${adminList.current+1}+'&size=10&aM=1'}:'#!'">
+                                        <span><i class="mdi mdi-chevron-right"></i></span>
+                                    </a>
+                                </li>
+                            </ul>
+                            </nav>
+                        </div>
+                        </div>
+                        <div id="modAd"  th:class="${aM}== '2' ? 'tab-pane fade active in':'tab-pane fade'">
+                            <div class="container-fluid">
+                                <form class="form-horizontal col-md-12">
+
+                                    <input type="hidden" id="adminId" value="">
+                                    <div class="form-group">
+                                        <label class="col-xs-12" for="userName">管理员名称</label>
+                                        <div class="col-xs-12">
+                                            <input class="form-control" id="userName" name="name"
+                                                   placeholder="管理员名称.." required type="text">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-xs-12" for="nickName">昵称</label>
+                                        <div class="col-xs-12">
+                                            <input class="form-control" id="nickName"
+                                                   placeholder="昵称.." required type="text">
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="type" value="1">
+                                    <div class="form-group">
+                                        <label class="col-xs-12" for="status">管理员状态</label>
+                                        <div class="col-xs-12">
+                                            <select class="form-control" id="status" name="status"
+                                                    size="1">
+                                                <option value="0">正常</option>
+                                                <option value="1">停用</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-xs-12" for="email">邮箱</label>
+                                        <div class="col-xs-12">
+                                            <input class="form-control" id="email"
+                                                   placeholder="邮箱.." required type="email">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-xs-12" for="phonenumber">手机号</label>
+                                        <div class="col-xs-12">
+                                                        <input class="form-control" type="tel" id="phonenumber" name="phonenumber"
+                                                                  placeholder="手机号.." />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-2">
+                                            <button class="btn-sm btn-primary" id="AdminSubmintBtn"
+                                                    type="button">提交
+                                            </button>
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <button class="btn-sm btn-warning" type="reset">清空</button>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <button class="btn-sm btn-purple">
+                                                <a data-toggle="tab" href="#adlist"
+                                                   style="color: white">返回</a>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+
+<script src="/static/admin/js/jquery.min.js" type="text/javascript"></script>
+<script src="/static/admin/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/static/admin/js/perfect-scrollbar.min.js" type="text/javascript"></script>
+<script src="/static/admin/js/main.js" type="text/javascript"></script>
+<script src="/static/admin/js/common.js"></script>
+<script>
+let $htmlInsert = $("#htmlInsert");
+var temp=["正常","停用"];
+function ShowRole(id){
+    $htmlInsert.empty();
+    let doajax = Doajax("/admin/management/getAdminRoles","GET",{id:id});
+    let data = doajax.data;
+    console.log(data);
+    for (var i=0;i<data.length;i++){
+        let t=i+1;
+       let html="<tr ><th scope='row'>"+t+"</th><td>"+data[i].name+"</td><td>"+data[i].roleKey+"</td><td>"+temp[data[i].status]+"</td></tr>";
+        console.log(html);
+       $htmlInsert.append(html);
+    }
+}
+function deleteAdmin(id){
+    let doajax = Doajax("/admin/management/deleteAdmin","GET",{id:id});
+    location.reload();
+}
+function stopAdmin(id){
+    let doajax = Doajax("/admin/management/stopAdmin","GET",{id:id});
+    location.reload();
+}
+function reNewAdmin(id){
+    let doajax = Doajax("/admin/management/reNewAdmin","GET",{id:id});
+    location.reload();
+}
+function isFillingAdmin(check,id){
+    if(check&&id!==""){
+        let doajax = Doajax("/admin/management/getAdminById","get",{id:id});
+        let data = doajax.data;
+        $("#adminId").val(id);
+        $("#userName").val(data.userName);
+        $("#nickName").val(data.nickName);
+        $("#status").val(data.status);
+        $("#email").val(data.email);
+        $("#phonenumber").val(data.phonenumber);
+    }
+    else{
+        $("#userName").val("");
+        $("#nickName").val("");
+        $("#status").val("");
+        $("#email").val("");
+        $("#phonenumber").val("");
+    }
+}
+$("#AdminSubmintBtn").click(function(){
+    let doajax = Doajax("/admin/management/updateAdmin","Post",{
+        id: $("#adminId").val(),
+        userName: $("#userName").val(),
+        nickName:  $("#nickName").val(),
+        type:$("#type").val(),
+        status:$("#status").val(),
+        email: $("#email").val(),
+        phonenumber:$("#phonenumber").val()
+    });
+    console.log(doajax);
+    if(doajax.code===200){
+        alert("操作成功！");
+        location.reload();
+    }
+    else  alert("出错！");
+
+})
+</script>
+</body>
+</html>

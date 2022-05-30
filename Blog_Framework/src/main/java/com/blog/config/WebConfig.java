@@ -57,6 +57,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/upload/**").addResourceLocations("file:/" +"E://jee-2020-092/spring boot/my_Blog/Blog/src/main/resources/static/upload/");
+        //将上传文件映射到本地
+        registry.addResourceHandler("/upload/**")
+                .addResourceLocations("file:/" +"E://jee-2020-092/spring boot/my_Blog/Blog/src/main/resources/static/upload/");
     }
 }

@@ -9,8 +9,10 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Blog_Framework" />
         <module name="Blog" />
-        <module name="Blog_admin" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Blog_admin" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>个人信息 - bootstrap中文后台管理系统模板</title>
+<link rel="icon" href="favicon.ico" type="image/ico">
+
+
+  <link href="/static/admin/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/admin/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="/static/admin/css/style.css" rel="stylesheet">
+  <link href="/static/admin/css/ajaxUpload.css" rel="stylesheet">
+</head>
+  
+<body data-logobg="color_8" data-sidebarbg="color_8">
+<div class="layout-web">
+  <div class="layout-container">
+    <!--左侧导航-->
+    <div th:replace="~{admin/index::AsideNav}"></div>
+    <!--End 左侧导航-->
+    <!--头部信息-->
+    <div th:replace="~{admin/index::HeaderNav}"></div>
+    <!--End 头部信息-->
+
+    <!--页面主要内容-->
+    <main class="layout-content">
+      
+      <div class="container-fluid">
+        
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card" th:each="user : ${userInfo}">
+              <div class="card-body">
+                
+                <div class="edit-avatar">
+                  <img th:src="${user.avatar}" alt="..." id="headerImage" class="img-avatar">
+                  <div class="avatar-divider"></div>
+                  <div class="edit-avatar-content">
+                    <p class="m-0">选择一张你喜欢的图片，支持jpg,png格式，上传图片大小不能超过5M。</p>
+                    <div class="image-box"></div>
+                  </div>
+                </div>
+                <hr>
+                <form method="post" action="#!" class="site-form">
+                  <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" class="form-control" name="username" id="username" th:value="${user.userName}" disabled="disabled" />
+                  </div>
+                  <div class="form-group">
+                    <label for="nickname">昵称</label>
+                    <input type="text" class="form-control" name="nickname" id="nickname" placeholder="输入您的昵称" th:value="${user.nickName}">
+                  </div>
+                  <div class="form-group">
+                    <label for="email">邮箱</label>
+                    <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="请输入正确的邮箱地址" th:value="${user.email}">
+                    <small id="emailHelp" class="form-text text-muted">请保证您填写的邮箱地址是正确的。</small>
+                  </div>
+                  <div class="form-group">
+                    <label for="remark">简介</label>
+                    <textarea class="form-control" name="remark" id="remark" rows="3"></textarea>
+                  </div>
+                  <button type="button" id="btnSubmit" class="btn btn-primary">保存</button>
+                </form>
+       
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+      </div>
+      
+    </main>
+    <!--End 页面主要内容-->
+  </div>
+</div>
+<script src="/static/admin/js/jquery.min.js" type="text/javascript"></script>
+<script src="/static/admin/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/static/admin/js/perfect-scrollbar.min.js" type="text/javascript"></script>
+<script src="/static/admin/js/main.js" type="text/javascript"></script>
+<script src="/static/admin/js/upload.js" type="text/javascript" ></script>
+<script src="/static/admin/js/common.js"></script>
+<script>
+  var url;
+  $(".image-box").ajaxImageUpload({
+    fileInput : 'articleImg',
+    postUrl : '/uploadArticle', //上传的服务器地址
+    width :  120,
+    height : 120,
+    maxNum : 1, //允许上传图片数量
+    allowZoom : true, //允许放大
+    allowType : ['png','jpg'], //允许上传图片的类型
+    maxSize : 5 , //允许上传图片的最大尺寸，单位M
+    appendMethod : 'before',
+    before: function () {
+      //alert('上传前回调函数1');
+    },
+    success : function(json){
+      //成功的回调 可保存回传的图片地址
+      url=json.data[0];
+      console.log(json);
+    },
+    complete : function () {
+      //alert('全部上传成功回调函数1');
+    },
+    delete : function (src) {
+      //todo 后端实现删除图片接口
+    //  alert('删除时回调函数1，要删除的文件路径：' + src);
+    },
+    error : function (e) {
+      alert(e.msg + '(' + e.code + ')');
+    }
+  });
+  //修改信息提交
+  $("#btnSubmit").click(function () {
+    let nick= $("#nickname").val();
+    let em = $("#email").val();
+      let doajax = Doajax("/user/updataUser","post",{
+        nickName:nick,
+        email:em,
+        avatar:url
+      });
+      console.log(doajax);
+
+  })
+</script>
+</body>
+</html>

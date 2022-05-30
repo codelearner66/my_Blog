@@ -12,6 +12,10 @@ public class UserInfoVo {
     private Long id;
 
     /**
+     * 用户名
+     */
+    private String userName;
+    /**
      * 昵称
      */
     private String nickName;

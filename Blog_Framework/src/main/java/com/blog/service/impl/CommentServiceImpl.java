@@ -85,6 +85,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         //根评论 rootId为-1
         queryWrapper.eq(Comment::getRootId,-1);
         //分页查询
+        if(pageNum==null) {
+            pageNum=1;
+        }
         Page<Comment> page = new Page(pageNum,pageSize);
         page(page,queryWrapper);
         List<CommentVo> commentVoList = toCommentVoList(page.getRecords());
@@ -130,12 +133,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         //遍历vo集合
         for (CommentVo commentVo : commentVos) {
             //通过creatyBy查询用户的昵称并赋值
-            String nickName = userService.getById(commentVo.getCreateBy()).getNickName();
+            String nickName =userService.getById(commentVo.getCreateBy()).getNickName()==null? "该用户已注销" : userService.getById(commentVo.getCreateBy()).getNickName() ;
             commentVo.setUsername(nickName);
             //通过toCommentUserId查询用户的昵称并赋值
             //如果toCommentUserId不为-1才进行查询
             if(commentVo.getToCommentUserId()!=-1){
-                String toCommentUserName = userService.getById(commentVo.getToCommentUserId()).getNickName();
+                String toCommentUserName =commentVo.getToCommentUserId()!=null? userService.getById(commentVo.getToCommentUserId()).getNickName():"该用户已注销";
                 commentVo.setToCommentUserName(toCommentUserName);
             }
         }
